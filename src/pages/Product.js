@@ -2,55 +2,50 @@ import React, { useState }  from "react";
 import Dashboard from "../components/dashboard";
 import Navbar from "../components/navbar";
 import { Box } from "@mui/system";
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import { Button } from "@mui/material";
-import { styled } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
+import { Button, TextField, Grid, styled, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Paper, MenuItem} from "@mui/material";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 
 
 
 
 export default function Product(){
-    // const [count, setCount] = useState (1)
+    const [count, setCount] = useState (1)
     const [productlist, setProductList] = useState ([]); // List of Array
-
     const [formdata, setFormData] = useState({
         id: '',
         product: '',
-        price: '',      
-        stocks: '',
+        price: 0,      
+        stocks: 0,
         category: '',
     }); // object array
 
     const handleSubmit = (event) => {
         event.preventDefault(); //in prevent sini na function na mag reload ang page 
+        if (formdata.id === '' || formdata.product === '' || formdata.price === '' || formdata.stocks === '', formdata.category === ''){
+            alert("Enter Value");
+        }else{
+            const newprod = ({
+                id: count,
+                product: formdata.product,
+                price: formdata.price,
+                stocks: formdata.stocks,
+                category: formdata.category,
+            });
+            
+            setProductList([...productlist, newprod]) // dini in add ang mga data sa form
+            setCount(count+1)
 
-        // const newprod = ({
-        //     id: count,
-        //     product: '',
-        //     price: '',      
-        //     stocks: '',
-        //     category: '',
-        // })
-        setProductList([...productlist, formdata]) // dini in add ang mga data sa form
-        // setCount(count+1)
-        setFormData({
-            id: '',
-            product: '',
-            price: '',      
-            stocks: '',
-            category: '',
-        }); // In this part in reset lang niya sa empty ang mga form input once na trigger na ang button. 
+            setFormData({
+                id: '',
+                product: '',
+                price: '',      
+                stocks: '',
+                category: '',
+            }); // In this part in reset lang niya sa empty ang mga form input once na trigger na ang button. 
 
-        console.log(formdata)
+            console.log(newprod)
+        }
+        
     };
 
     const handleInputChange = (event) => {
@@ -62,6 +57,36 @@ export default function Product(){
           [name]: value,
         });
       };
+
+    const DeleteProduct = (product) => {
+        const delprodList = [...productlist];
+        delprodList.splice(product, 1);
+        setProductList(delprodList);
+        setFormData(delprodList);
+    }
+
+
+
+
+    //   const currencies = [
+    //     {
+    //       value: 'USD',
+    //       label: '$',
+    //     },
+    //     {
+    //       value: 'EUR',
+    //       label: '€',
+    //     },
+    //     {
+    //       value: 'BTC',
+    //       label: '฿',
+    //     },
+    //     {
+    //       value: 'JPY',
+    //       label: '¥',
+    //     },
+    //   ];
+      
     
     
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -111,11 +136,11 @@ export default function Product(){
                             id="outlined-required"
                             label="ID"
                             name="id"
-                            value={formdata.id}
+                            value={count}
                             onChange={handleInputChange}
                             variant="outlined"
                             fullWidth
-                           
+                                            
                         />
                         </Grid>
                         <Grid item xs={11} sm={2}>
@@ -128,6 +153,7 @@ export default function Product(){
                             onChange={handleInputChange}
                             variant="outlined"
                             fullWidth
+                           
                            
                         />
                         </Grid>
@@ -171,9 +197,25 @@ export default function Product(){
                             onChange={handleInputChange}
                             variant="outlined"
                             fullWidth
-                           
                         />
+
+                        {/* <TextField
+                            required
+                            id="Select Categoty"
+                            select
+                            label="Category"
+                            name="category"
+                            value={formdata.category}
+                            helperText="Please select your Category"
+                        >
+                            {currencies.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </TextField> */}
                         </Grid>
+
                         <Grid item xs={11} sm={2}>
                         <Stack direction="row" spacing={4} style={{width: "100%", alignItems: "center"}}>
                             <Button variant="contained" sx={{p: 2, width: "100%", background:"black" }} type="submit">SUBMIT</Button>
@@ -209,7 +251,7 @@ export default function Product(){
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={1}  style={{width: "85%", alignItems: "center", height: 49, marginRight:"-180px" }}>
                                         <Button variant="contained" size="small" color="success" sx={{p: 1, width: "50%",}} type="submit">EDIT</Button>
-                                        <Button variant="contained" size="small"  color="error" sx={{p: 1, width: "50%",}} type="submit">DELETE</Button>
+                                        <Button variant="contained" size="small"  color="error" sx={{p: 1, width: "50%",}} type="submit" onClick={() => DeleteProduct (product)}>DELETE</Button>
                                     </Stack>
                                 </StyledTableCell>
                                 
@@ -219,10 +261,6 @@ export default function Product(){
                         </Table>
                     </TableContainer>
                     <Grid/>
-                 
-                    
-
-
 
 
 

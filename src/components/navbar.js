@@ -193,7 +193,7 @@ export default function Navbar() {
                 component="div"
                 sx={{ display: { xs: 'none', sm: 'block' } }}
             >
-            TINDAHAN NI KENNETH
+            TINDAHAN NI PADI
             </Typography>
             <Search>
                 <SearchIconWrapper>
