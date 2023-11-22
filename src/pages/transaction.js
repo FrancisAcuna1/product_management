@@ -8,15 +8,15 @@ export default function Transaction(){
     return(
         <>  
             <Navbar/>
-            <Box height={30}/>
-            <Box sx={{ display: 'flex'  }}>
-                <Dashboard/>
+            <Box height={5}/>
+            <Box sx={{ display: 'flex'  }}/>
+                {/* <Dashboard/> */}
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <h1 style={{textAlign:"center"}}>Transaction</h1>
+                    <h1 style={{display: "flex", marginLeft:"-1px"}}>TRANSACTION</h1>
                     
                 </Box>
                
-            </Box>
+       
            
           
            

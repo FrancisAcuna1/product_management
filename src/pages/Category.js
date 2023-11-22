@@ -1,42 +1,58 @@
-import React, { useState }  from "react";
+import React, { useState, useEffect }  from "react";
 import Dashboard from "../components/dashboard";
 import Navbar from "../components/navbar";
 import { Box, Grid, TextField, Button, Stack, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, styled, tableCellClasses, Paper, Modal} from '@mui/material';
+import { width } from "@mui/system";
 // import { width } from "@mui/system";
 // import { Delete } from "@mui/icons-material";
 
 
  
-export default function Category(){
+export default function Category({sendarray}){
+    const [count, setCount] = useState (1)
     const [categ, setCateg] = useState([]);
     const [newcateg, setNewCateg] = useState({
         id: '',
         categories: '',
     });
 
-    const handleCategory = (event) => {
+    const handleSubmitCateg = (event) => {
         event.preventDefault();
         if (newcateg.categories === '') {
             alert("Enter Category Value!");
         } else {
-            setCateg([...categ, newcateg]);
+            const newcateglist = ({
+                id: count,
+                categories: newcateg.categories,
+            });
+
+            setCount(count+1)
+            setCateg([...categ, newcateglist]);
             setNewCateg({
                 id: '',
                 categories: '',
             });
             console.log(newcateg);
+
+            sendarray([...categ, newcateglist])
+           
         }
     };
 
     const handleNewCateg = (event) => {
-        const { value } = event.target;
+        const {value} = event.target;
 
         setNewCateg({
             ...newcateg,
+            id: count,
             categories: value,
         });
     };
     // Closing of adding category
+
+    // useEffect(() => {
+    //     sendarray(categ);
+    //   }, [categ, sendarray]);
 
     const DeleteCategory = (categlistid) => {
         const CategoryList = [...categ];
@@ -108,25 +124,38 @@ export default function Category(){
         <>  
             <Navbar/>
             <Box height={30}/>
-            <Box sx={{ display: 'flex'  }}>
-                <Dashboard/>
-                <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:"10px" }}>
-                    <h1 style={{display: "flex", marginLeft:"-1px"}}>CATEGORY</h1>
-                
+            <Box sx={{ display: 'flex', justifyContent: "center" }}>
+                {/* <Dashboard/> */}
+                <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:"-20px" }}>
                     <form
                         style={{
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
                             border: '2px solid black',
-                            padding: '20px',
-                            width: "50%"
+                            padding: '16px',
+                            width: "120%"
+
                         }}
-                        onSubmit={handleCategory}
+                        onSubmit={handleSubmitCateg}
                        
                         >
-                        <Grid container spacing={3}>
-                            <Grid item xs={12} sm={7}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={1.3}>
+                               <TextField
+                                    required
+                                    id="outlined-required"
+                                    label="ID"
+                                    name="id"
+                                    value={count}
+                                    onChange={handleNewCateg}
+                                    variant="outlined"
+                                    fullWidth
+                                
+                              
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
                                     id="outlined-required"
@@ -140,8 +169,8 @@ export default function Category(){
                             </Grid>
 
                           
-                            <Grid item xs={11} sm={5}>
-                            <Stack direction="row" spacing={4} style={{width: "100%", alignItems: "center"}}>
+                            <Grid item xs={12} sm={4.7}>
+                            <Stack direction="row" spacing={1} style={{width: "90%", alignItems: "center"}}>
                                 <Button variant="contained" sx={{p: 2, width: "100%", background:"black" }} type="submit">SUBMIT</Button>
                             </Stack>
                             </Grid>
@@ -151,20 +180,23 @@ export default function Category(){
                     <Box height={50}/>
                     <Grid container />
                     
-                    <TableContainer component={Paper} sx={{width: "50%"}}>
+                    <TableContainer component={Paper} sx={{width: "120%"}}>
                         <Table sx={{ minWidth: 300}} aria-label="customized table">
                             <TableHead>
-                            <TableRow>                            
-                                <StyledTableCell align="center">categories</StyledTableCell>
+                            <TableRow>
+                                <StyledTableCell align="center">ID</StyledTableCell>                            
+                                <StyledTableCell align="center">Categories</StyledTableCell>
                                 <StyledTableCell align="center">Action</StyledTableCell>
                             </TableRow>
                             </TableHead>
                             <TableBody>
                             {categ.map((categlist, value) => (
                                 <StyledTableRow key={value}>
+                                <StyledTableCell align="center">{categlist.id}</StyledTableCell>
                                 <StyledTableCell align="center">{categlist.categories}</StyledTableCell>
                                 <StyledTableCell align="center">
-                                    <Stack direction="row" spacing={1}  style={{display: "flex", justifyContent:"center", width: "100%", alignItems: "center", height: 49,}}>
+
+                                    <Stack direction="row" spacing={1}  style={{display: "flex", justifyContent:"center", width: "100%", alignItems: "center", height: 35,}}>
                                         <Button variant="contained" size="small" color="success" sx={{p: 1, width: "10%", justifyContent:"center", alignItems:"center"}} type="submit" onClick={() => handleEditCategory(categlist)}>EDIT</Button>
                                         <Button variant="contained" size="small"  color="error" sx={{p: 1, width: "10%", justifyContent:"center", alignItems:"center"}} type="submit" onClick={() => DeleteCategory(value)}>DELETE</Button>
                                     </Stack>

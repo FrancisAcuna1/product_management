@@ -1,36 +1,28 @@
-// CommonParent.js
-import React, { useState } from 'react';
-import Products from './pages/Product';
-import Category from './pages/Category';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+// import Tab from '@mui/material/Tab';
+import Home from "../pages/Home";
+import Product from "../pages/Product";
+import Category from "../pages/Category";
+// import Transaction from "./pages/transaction";
+// import Report from "./pages/Report";
 
-const CommonParent = ({ initialProducts }) => {
-  const [productsList, setProductsList] = useState(initialProducts);
 
-//   const addProduct = (newProduct) => {
-//     setProducts([...products, { ...newProduct, id: Date.now() }]);
-//   };
-
-const DelCateg = (value) => {
-    setProductsList(productsList.filter((product) => product.value !== value));
-  };
-  
-
-  const UpdCateg = (updatedProduct) => {
-    setProductsList((prevProducts) =>
-      prevProducts.map((product) => (product.value === updatedProduct.value ? updatedProduct : product))
-    );
-  };
+export default function NavTabs() {
+ 
 
   return (
-    <div>
-    <Category
-        UpdCateg={UpdCateg}
-        DelCateg={DelCateg}
-    />
-
-      {/* <StocksManagement products={products} setProducts={setProducts} /> */}
-    </div>
+    <Box sx={{ width: '100%' }}>
+      <Tabs aria-label="nav tabs example">
+        <Home/>
+      </Tabs>
+      <Tabs aria-label="nav tabs example">
+        <Product/>
+      </Tabs>
+      <Tabs aria-label="nav tabs example">
+        <Category/>
+      </Tabs>
+    </Box>
   );
-};
-
-export default CommonParent;
+}

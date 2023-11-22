@@ -2,13 +2,13 @@ import React, { useState }  from "react";
 import Dashboard from "../components/dashboard";
 import Navbar from "../components/navbar";
 import { Box } from "@mui/system";
-import { Button, TextField, Grid, styled, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Paper, MenuItem} from "@mui/material";
+import { Button, TextField, Grid, styled, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Paper, MenuItem, Modal}from "@mui/material";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 
 
 
-export default function Product(){
+export default function Product({arraycateg, sendprodarray}){
     const [count, setCount] = useState (1)
     const [productlist, setProductList] = useState ([]); // List of Array
     const [formdata, setFormData] = useState({
@@ -44,6 +44,7 @@ export default function Product(){
             }); // In this part in reset lang niya sa empty ang mga form input once na trigger na ang button. 
 
             console.log(newprod)
+            sendprodarray([...productlist, formdata])
         }
         
     };
@@ -65,29 +66,43 @@ export default function Product(){
         setFormData(delprodList);
     }
 
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [editProductValue, setEditProductValue] = useState("");
 
+    const handleEditProduct = (product) => {
+        setSelectedProduct(product);
+        setEditProductValue({
+            id: product.id,
+            product: product.product,
+            price: product.price,
+            stocks: product.stocks,
+            category: product.category
+            
+        });
+    };
 
+    const handleUpdateProduct = () => {
+        const updatedProduct = productlist.map((product) =>
+        product === selectedProduct
+            ? { ...product, 
+                id: editProductValue.id,
+                product: editProductValue.product, 
+                price: editProductValue.price,
+                stocks: editProductValue.stocks,
+                category: editProductValue.category,
+            }
+            : product
+        );
 
-    //   const currencies = [
-    //     {
-    //       value: 'USD',
-    //       label: '$',
-    //     },
-    //     {
-    //       value: 'EUR',
-    //       label: '€',
-    //     },
-    //     {
-    //       value: 'BTC',
-    //       label: '฿',
-    //     },
-    //     {
-    //       value: 'JPY',
-    //       label: '¥',
-    //     },
-    //   ];
-      
-    
+        setProductList(updatedProduct);
+        handleCloseModal(); // Close the modal after updating
+    };
+
+    const handleCloseModal = () => {
+        setSelectedProduct(null);
+        setEditProductValue("");
+    };
+          
     
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -113,11 +128,11 @@ export default function Product(){
         <>  
             <Navbar/>
             <Box height={30}/>
-            <Box sx={{ display: 'flex'  }}>
-                <Dashboard/>
+            <Box sx={{ display: 'flex',  justifyContent: 'center', }}>
+                {/* <Dashboard/> */}
 
-                <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:"10px" }}>
-                <h1 style={{display: "flex", marginLeft:"-1px"}}>PRODUCTS</h1>
+                <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:"-20px" }}>
+                {/* <h1 style={{display: "flex", marginLeft:"-1px"}}>PRODUCTS</h1> */}
             
                 <form
                     style={{
@@ -126,11 +141,13 @@ export default function Product(){
                         alignItems: 'center',
                         border: '2px solid black',
                         padding: '20px',
+                        width: '100%',
+                        marginRight: '-20px'
                     }}
                     onSubmit={handleSubmit}
                     >
                     <Grid container spacing={3}>
-                        <Grid item xs={11} sm={2}>
+                        <Grid item xs={11.8} sm={2}>
                         <TextField
                             required
                             id="outlined-required"
@@ -143,7 +160,7 @@ export default function Product(){
                                             
                         />
                         </Grid>
-                        <Grid item xs={11} sm={2}>
+                        <Grid item xs={11.8} sm={2}>
                         <TextField
                             required
                             id="outlined-required"
@@ -153,11 +170,9 @@ export default function Product(){
                             onChange={handleInputChange}
                             variant="outlined"
                             fullWidth
-                           
-                           
                         />
                         </Grid>
-                        <Grid item xs={11} sm={2}>
+                        <Grid item xs={11.8} sm={2}>
                         <TextField
                             required
                             id="outlined-number"
@@ -172,7 +187,7 @@ export default function Product(){
                            
                         />
                         </Grid>
-                        <Grid item xs={11} sm={2}>
+                        <Grid item xs={11.8} sm={2}>
                         <TextField
                             required
                             id="outlined-number"
@@ -187,8 +202,8 @@ export default function Product(){
                            
                         />
                         </Grid>
-                        <Grid item xs={11} sm={2}>
-                        <TextField
+                        <Grid item xs={11.8} sm={2}>
+                        {/* <TextField
                             required
                             id="outlined-required"
                             label="Category"
@@ -197,26 +212,28 @@ export default function Product(){
                             onChange={handleInputChange}
                             variant="outlined"
                             fullWidth
-                        />
-
-                        {/* <TextField
+                        /> */}
+                        
+                        <TextField
                             required
                             id="Select Categoty"
                             select
                             label="Category"
                             name="category"
                             value={formdata.category}
+                            onChange={handleInputChange}
+                            fullWidth
                             helperText="Please select your Category"
                         >
-                            {currencies.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
+                            {arraycateg.map((item) => (
+                                <MenuItem key={item.id} value={item.categories}>
+                                    {item.categories}
                                 </MenuItem>
                             ))}
-                        </TextField> */}
+                        </TextField>
                         </Grid>
 
-                        <Grid item xs={11} sm={2}>
+                        <Grid item xs={11.8} sm={2}>
                         <Stack direction="row" spacing={4} style={{width: "100%", alignItems: "center"}}>
                             <Button variant="contained" sx={{p: 2, width: "100%", background:"black" }} type="submit">SUBMIT</Button>
                         </Stack>
@@ -250,7 +267,7 @@ export default function Product(){
                                 <StyledTableCell align="center">{product.category}</StyledTableCell>
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={1}  style={{width: "85%", alignItems: "center", height: 49, marginRight:"-180px" }}>
-                                        <Button variant="contained" size="small" color="success" sx={{p: 1, width: "50%",}} type="submit">EDIT</Button>
+                                        <Button variant="contained" size="small" color="success" sx={{p: 1, width: "50%",}} type="submit" onClick={() => handleEditProduct (product)}>EDIT</Button>
                                         <Button variant="contained" size="small"  color="error" sx={{p: 1, width: "50%",}} type="submit" onClick={() => DeleteProduct (product)}>DELETE</Button>
                                     </Stack>
                                 </StyledTableCell>
@@ -262,12 +279,87 @@ export default function Product(){
                     </TableContainer>
                     <Grid/>
 
-
+                    <Modal
+                        open={Boolean(selectedProduct)}
+                        onClose={handleCloseModal}
+                        aria-labelledby="modal-title"
+                        aria-describedby="modal-description"
+                    >
+                        <div
+                        style={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            background: "white",
+                            padding: "20px",
+                            outline: "none",
+                            width: "22%"
+                            
+                        }}
+                        >
+                        <h2 id="modal-title">Edit Product</h2>
+                        <Grid item xs={12} sm={6}>
+                        <TextField
+                            disabled
+                            label="ID"
+                            variant="outlined"
+                            fullWidth
+                            sx={{marginBottom: 1, color: 'primary'}}
+                            value={editProductValue.id}
+                            onChange={(e) => setEditProductValue({...editProductValue, id: e.target.value})}
+                        />
+                         <TextField
+                            label="Product"
+                            variant="outlined"
+                            fullWidth
+                            sx={{marginBottom: 1}}
+                            value={editProductValue.product}
+                            onChange={(e) => setEditProductValue({...editProductValue, product: e.target.value})}
+                        />
+                         <TextField
+                            label="Price"
+                            variant="outlined"
+                            fullWidth
+                            sx={{marginBottom: 1}}
+                            value={editProductValue.price}
+                            onChange={(e) => setEditProductValue({...editProductValue, price: e.target.value})}
+                        />
+                         <TextField
+                            label="Stocks"
+                            variant="outlined"
+                            fullWidth
+                            sx={{marginBottom: 1}}
+                            value={editProductValue.stocks}
+                            onChange={(e) => setEditProductValue({...editProductValue, stocks: e.target.value})}
+                        />
+                        <TextField
+                            required
+                            id="Select Categoty"
+                            select
+                            sx={{width:"100%"}}
+                            value={editProductValue.category}
+                            onChange={(e) => setEditProductValue({...editProductValue, category: e.target.value})}
+                        >
+                            {arraycateg.map((item) => (
+                                <MenuItem key={item.id} value={item.categories}>
+                                    {item.categories}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        </Grid>
+                        <br/>
+                        <Button variant="contained" color="primary" sx={{marginTop: 1, marginBottom: 1,}} onClick={handleUpdateProduct}>
+                            Update
+                        </Button>
+                        </div>
+                    </Modal>
 
 
 
 
                 </Box>
+                
                
             </Box>
            

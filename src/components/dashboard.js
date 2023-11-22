@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -25,7 +26,19 @@ import ShoppingCartSharpIcon from '@mui/icons-material/ShoppingCartSharp';
 import ClassSharpIcon from '@mui/icons-material/ClassSharp';
 import PaidSharpIcon from '@mui/icons-material/PaidSharp';
 import LeaderboardSharpIcon from '@mui/icons-material/LeaderboardSharp';
+import InventorySharpIcon from '@mui/icons-material/InventorySharp';
 import { NavLink } from "react-router-dom";
+
+import Tab from '@mui/material/Tab';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
+
+import Home from '../pages/Home';
+import Product from '../pages/Product';
+import Category from '../pages/Category';
+import Stocks from '../pages/Stocks';
+import Transaction from '../pages/transaction';
 
 const drawerWidth = 240;
 
@@ -59,23 +72,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-// const AppBar = styled(MuiAppBar, {
-//   shouldForwardProp: (prop) => prop !== 'open',
-// })(({ theme, open }) => ({
-//   zIndex: theme.zIndex.drawer + 1,
-//   transition: theme.transitions.create(['width', 'margin'], {
-//     easing: theme.transitions.easing.sharp,
-//     duration: theme.transitions.duration.leavingScreen,
-//   }),
-//   ...(open && {
-//     marginLeft: drawerWidth,
-//     width: `calc(100% - ${drawerWidth}px)`,
-//     transition: theme.transitions.create(['width', 'margin'], {
-//       easing: theme.transitions.easing.sharp,
-//       duration: theme.transitions.duration.enteringScreen,
-//     }),
-//   }),
-// }));
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -94,14 +90,33 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
+
+
 export default function Dashboard() {
     const theme = useTheme();
     // const [open, setOpen] = React.useState(false);
-    const navbar = useNavigate();
+    // const navbar = useNavigate();
     // const updateOpen = UseApp ((state) => state.updateOpen);
     const open = UseApp ((state) => state.Nopen);
 
- 
+    // -------------INDAGDAG NA CODE PARA SA TABS--------------
+    const [value, setValue] = useState('0');
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+    console.log(value)
+
+    const [newcatlist, setNewCatList] = useState([]);
+    const newsendarray = (arrayfromcategory) => {
+      setNewCatList(arrayfromcategory);
+    };
+  
+    const [newprodlist, setNewProdList] = useState([]);
+    const newsendprodarray = (arrayfromprod) => {
+      setNewProdList(arrayfromprod);
+    };
+
+    // -------------CLOSING--------------
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -132,11 +147,183 @@ export default function Dashboard() {
             </IconButton>
             </DrawerHeader>
 
-
-
             <Divider />
-            <List>      
-                <ListItem  disablePadding sx={{ display: 'block' }} onClick={() => {navbar("/")}}>                
+            <TabContext value={value.toString()}>
+                <TabList
+                    orientation="vertical"
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="Vertical tabs example"
+                    sx={{ borderRight: 1, borderColor: 'divider', marginTop:3 }}
+                >
+                   <Tab 
+                        label={
+                            <ListItem                
+                                sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                                }}
+                            >
+                            <React.Fragment sx={{ fontSize: 16, opacity: open ? 1 : 0,  alignItems: 'center' }}>
+
+                                        <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                        >
+                                        <HomeSharpIcon sx={{fontSize: 30, marginLeft: -2.9}}/>
+                                        </ListItemIcon>                   
+                                        <ListItemText primary="Home" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                  
+                            </React.Fragment>
+                            </ListItem>  
+                            
+                        }
+                        
+                    />
+                    <Tab
+                        label={
+                            <ListItem                
+                                sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                                }}
+                            >
+                            <React.Fragment sx={{ fontSize: 16, opacity: open ? 1 : 0, display: 'flex', alignItems: 'center' }}>
+
+                                        <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                        >
+                                        <ShoppingCartSharpIcon sx={{fontSize: 30, marginLeft: -2.9 }}/>
+                                        </ListItemIcon>                   
+                                        <ListItemText primary="Product" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />       
+                            </React.Fragment>   
+                            </ListItem>  
+                        }
+                   
+                    />
+                    <Tab
+                        label={
+                            <ListItem                
+                                sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                                }}
+                            >
+                            <React.Fragment sx={{ fontSize: 16, opacity: open ? 1 : 0, display: 'flex', alignItems: 'center' }}>
+
+                                        <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                        >
+                                        <ClassSharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
+                                        </ListItemIcon>                   
+                                        <ListItemText primary="Category" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                  
+                            </React.Fragment>
+                            </ListItem>  
+                        }
+                    />
+                    <Tab
+                        label={
+                            <ListItem                
+                                sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                                }}
+                            >
+                            <React.Fragment sx={{ fontSize: 16, opacity: open ? 1 : 0, display: 'flex', alignItems: 'center' }}>
+
+                                        <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                        >
+                                        <PaidSharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
+                                        </ListItemIcon>                   
+                                        <ListItemText primary="Transaction" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                  
+                            </React.Fragment>
+                            </ListItem>  
+                        }
+                    />
+                    <Tab
+                        label={
+                            <ListItem                
+                                sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                                }}
+                            >
+                            <React.Fragment sx={{ fontSize: 16, opacity: open ? 1 : 0, display: 'flex', alignItems: 'center' }}>
+
+                                        <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                        >
+                                        <InventorySharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
+                                        </ListItemIcon>                   
+                                        <ListItemText primary="Stocks" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                  
+                            </React.Fragment>
+                            </ListItem>  
+                        }
+                    />
+                    <Tab
+                        label={
+                            <ListItem                
+                                sx={{
+                                minHeight: 48,
+                                justifyContent: open ? 'initial' : 'center',
+                                px: 2.5,
+                                }}
+                            >
+                            <React.Fragment sx={{ fontSize: 16, opacity: open ? 1 : 0, display: 'flex', alignItems: 'center' }}>
+
+                                        <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                        >
+                                        <LeaderboardSharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
+                                        </ListItemIcon>                   
+                                        <ListItemText primary="Reports" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                  
+                            </React.Fragment>
+                            </ListItem>  
+                        }
+                    />
+                </TabList>
+            </TabContext>
+
+
+
+
+
+
+            {/* <List>      
+                <ListItem  disablePadding sx={{ display: 'block', marginTop:1 }} onClick={() => {navbar("/")}}>                
                 <ListItemButton
                     sx={{
                     minHeight: 48,
@@ -177,7 +364,6 @@ export default function Dashboard() {
                     
                     <ShoppingCartSharpIcon sx={{fontSize: 30  }}/>
                     </ListItemIcon>
-                    {/* <NavLink to="/product">Home</NavLink> */}
                     <ListItemText primary="Product" sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
                 </ListItem>      
@@ -253,9 +439,41 @@ export default function Dashboard() {
                     <ListItemText primary="Reports" sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
                 </ListItem>
-            </List>
+            </List> */}
         </Drawer>
-        
+        <Box>
+        <DrawerHeader />
+        <TabContext value={value.toString()}>
+          <TabPanel value="0">
+                <h1>HOME</h1>
+            {/* <Home arraycateg={newcatlist} arrayprod={newprodlist}/> */}
+          </TabPanel>
+          <TabPanel value="1">
+            <h1>PRODUCT</h1>
+            <Product arraycateg={newcatlist} sendprodarray={newsendprodarray}/>
+          </TabPanel>
+          <TabPanel value="2">           
+            <h1>Category</h1>
+            <Category sendarray={newsendarray}/>
+          </TabPanel>
+          <TabPanel value="3">
+            <Transaction/>
+          </TabPanel>
+          <TabPanel value="4">
+            {/* <h1>STOCKS</h1> */}
+            <Stocks/>
+          </TabPanel>
+          <TabPanel value="5">
+            <h1>REPORTS</h1>
+            {/* <Category sendarray={newsendarray}/> */}
+          </TabPanel>
+        </TabContext>
         </Box>
+    </Box>
+
+     
+
+ 
+
     );
 }
