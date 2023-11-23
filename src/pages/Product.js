@@ -8,11 +8,11 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 
 
-export default function Product({arraycateg, sendprodarray}){
+export default function Product({categ, productlist, setProductList}){
     const [count, setCount] = useState (1)
-    const [productlist, setProductList] = useState ([]); // List of Array
+  
     const [formdata, setFormData] = useState({
-        id: '',
+        id: '', 
         product: '',
         price: 0,      
         stocks: 0,
@@ -44,7 +44,6 @@ export default function Product({arraycateg, sendprodarray}){
             }); // In this part in reset lang niya sa empty ang mga form input once na trigger na ang button. 
 
             console.log(newprod)
-            sendprodarray([...productlist, formdata])
         }
         
     };
@@ -127,11 +126,10 @@ export default function Product({arraycateg, sendprodarray}){
     return(
         <>  
             <Navbar/>
-            <Box height={30}/>
             <Box sx={{ display: 'flex',  justifyContent: 'center', }}>
                 {/* <Dashboard/> */}
 
-                <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:"-20px" }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: 'white' }}>
                 {/* <h1 style={{display: "flex", marginLeft:"-1px"}}>PRODUCTS</h1> */}
             
                 <form
@@ -203,17 +201,6 @@ export default function Product({arraycateg, sendprodarray}){
                         />
                         </Grid>
                         <Grid item xs={11.8} sm={2}>
-                        {/* <TextField
-                            required
-                            id="outlined-required"
-                            label="Category"
-                            name="category"
-                            value={formdata.category}
-                            onChange={handleInputChange}
-                            variant="outlined"
-                            fullWidth
-                        /> */}
-                        
                         <TextField
                             required
                             id="Select Categoty"
@@ -225,7 +212,7 @@ export default function Product({arraycateg, sendprodarray}){
                             fullWidth
                             helperText="Please select your Category"
                         >
-                            {arraycateg.map((item) => (
+                            {categ.map((item) => (
                                 <MenuItem key={item.id} value={item.categories}>
                                     {item.categories}
                                 </MenuItem>
@@ -341,7 +328,7 @@ export default function Product({arraycateg, sendprodarray}){
                             value={editProductValue.category}
                             onChange={(e) => setEditProductValue({...editProductValue, category: e.target.value})}
                         >
-                            {arraycateg.map((item) => (
+                            {categ.map((item) => (
                                 <MenuItem key={item.id} value={item.categories}>
                                     {item.categories}
                                 </MenuItem>

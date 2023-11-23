@@ -27,8 +27,11 @@ function App() {
 
   return (
     <>
-      <Navbar/>
-      <Dashboard/>
+      <div style={{height: "100vh", backgroundColor: "whitesmoke"}}>
+        <Navbar/>
+        <Dashboard/>  
+      </div>
+     
       {/* <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home arraycateg={newcatlist} arrayprod={newprodlist} />} />

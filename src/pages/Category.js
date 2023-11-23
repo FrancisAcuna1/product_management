@@ -8,9 +8,9 @@ import { width } from "@mui/system";
 
 
  
-export default function Category({sendarray}){
+export default function Category({ setCateg, categ}){
     const [count, setCount] = useState (1)
-    const [categ, setCateg] = useState([]);
+    // const [categ, setCateg] = useState([]); // this array is nasa dashbaord na 
     const [newcateg, setNewCateg] = useState({
         id: '',
         categories: '',
@@ -34,7 +34,7 @@ export default function Category({sendarray}){
             });
             console.log(newcateg);
 
-            sendarray([...categ, newcateglist])
+            // sendarray([...categ, newcateglist])
            
         }
     };
@@ -50,9 +50,6 @@ export default function Category({sendarray}){
     };
     // Closing of adding category
 
-    // useEffect(() => {
-    //     sendarray(categ);
-    //   }, [categ, sendarray]);
 
     const DeleteCategory = (categlistid) => {
         const CategoryList = [...categ];
@@ -60,14 +57,6 @@ export default function Category({sendarray}){
         setNewCateg(CategoryList);
         setCateg(CategoryList);
     }
-    // const DeleteCategory = (value) =>{
-    //     DelCateg(value);
-    // }
-
-    // const DeleteCategory = (categlistid) => {
-    //     const updatedCategories = categ.filter((category) => category.value !== categlistid);
-    //     setCateg(updatedCategories);
-    // };
 
     // Update Code
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -123,8 +112,7 @@ export default function Category({sendarray}){
     return(
         <>  
             <Navbar/>
-            <Box height={30}/>
-            <Box sx={{ display: 'flex', justifyContent: "center" }}>
+            <Box sx={{ display: 'flex', justifyContent: "center", backgroundColor: 'white'}}>
                 {/* <Dashboard/> */}
                 <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:"-20px" }}>
                     <form
@@ -134,7 +122,8 @@ export default function Category({sendarray}){
                             alignItems: 'center',
                             border: '2px solid black',
                             padding: '16px',
-                            width: "120%"
+                            marginTop:'30px'
+                           
 
                         }}
                         onSubmit={handleSubmitCateg}
@@ -180,7 +169,7 @@ export default function Category({sendarray}){
                     <Box height={50}/>
                     <Grid container />
                     
-                    <TableContainer component={Paper} sx={{width: "120%"}}>
+                    <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 300}} aria-label="customized table">
                             <TableHead>
                             <TableRow>
@@ -207,9 +196,8 @@ export default function Category({sendarray}){
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Grid/>
 
-                       {/* Modal for editing category */}
+                    <Grid/>
                     <Modal
                         open={Boolean(selectedCategory)}
                         onClose={handleCloseModal}

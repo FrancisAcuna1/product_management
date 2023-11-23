@@ -106,40 +106,25 @@ export default function Dashboard() {
     };
     console.log(value)
 
-    const [newcatlist, setNewCatList] = useState([]);
-    const newsendarray = (arrayfromcategory) => {
-      setNewCatList(arrayfromcategory);
-    };
+    // const [newcatlist, setNewCatList] = useState([]);
+    // const newsendarray = (arrayfromcategory) => {
+    //   setNewCatList(arrayfromcategory);
+    // };
   
-    const [newprodlist, setNewProdList] = useState([]);
-    const newsendprodarray = (arrayfromprod) => {
-      setNewProdList(arrayfromprod);
-    };
+    // const [newprodlist, setNewProdList] = useState([]);
+    // const newsendprodarray = (arrayfromprod) => {
+    //   setNewProdList(arrayfromprod);
+    // };
+
+    const [productlist, setProductList] = useState ([]); // List of Array from product list     
+    const [categ, setCateg] = useState([]); // List of Array from Category list   
+    // const [transaction, setMgaTransaction] = useState ([]); // List of Array
 
     // -------------CLOSING--------------
 
     return (
         <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        {/* <AppBar position="fixed" open={open}>
-            <Toolbar>
-            <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{
-                marginRight: 5,
-                ...(open && { display: 'none' }),
-                }}
-            >
-                <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-                Mini variant drawer
-            </Typography>
-            </Toolbar>
-        </AppBar> */}
         <Drawer variant="permanent" open={open}>
             <DrawerHeader>
             <IconButton>
@@ -180,9 +165,7 @@ export default function Dashboard() {
                                   
                             </React.Fragment>
                             </ListItem>  
-                            
                         }
-                        
                     />
                     <Tab
                         label={
@@ -316,158 +299,35 @@ export default function Dashboard() {
                     />
                 </TabList>
             </TabContext>
-
-
-
-
-
-
-            {/* <List>      
-                <ListItem  disablePadding sx={{ display: 'block', marginTop:1 }} onClick={() => {navbar("/")}}>                
-                <ListItemButton
-                    sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                    }}
-                >
-                    <ListItemIcon
-                    sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
-                    }}
-                    >
-                    <HomeSharpIcon sx={{fontSize: 30  }}/>
-                    </ListItemIcon>                   
-                    <ListItemText primary="Home" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-                </ListItem>   
-            </List>
-
-            <List>       
-                <ListItem  disablePadding sx={{ display: 'block' }} onClick={() => {navbar("/product")}}>
-                <ListItemButton
-                    sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                    }}
-                >
-                    <ListItemIcon
-                    sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
-                    }}
-                    >
-                    
-                    <ShoppingCartSharpIcon sx={{fontSize: 30  }}/>
-                    </ListItemIcon>
-                    <ListItemText primary="Product" sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-                </ListItem>      
-            </List>
-
-            <List>
-                <ListItem  disablePadding sx={{ display: 'block' }} onClick={() => {navbar("/category")}}>
-                <ListItemButton
-                    sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                    }}
-                >
-                    
-                    <ListItemIcon
-                    sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
-                    }}
-                    >
-
-                    <ClassSharpIcon sx={{fontSize: 30  }}/>
-                    </ListItemIcon>
-                    <ListItemText primary="Category" sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-                </ListItem>
-            </List>
-
-            <List>
-                <ListItem  disablePadding sx={{ display: 'block' }} onClick={() => {navbar("/transaction")}}>
-                <ListItemButton
-                    sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                    }}
-                >
-                    <ListItemIcon
-                    sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
-                    }}
-                    >
-                    <PaidSharpIcon sx={{fontSize: 30  }}/>
-                    </ListItemIcon>
-                    <ListItemText primary="Transaction" sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-                </ListItem>
-            </List>
-
-            <List>
-                <ListItem  disablePadding sx={{ display: 'block' }} onClick={() => {navbar("/report")}}>
-                <ListItemButton
-                    sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                    }}
-                >
-                    <ListItemIcon
-                    sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : 'auto',
-                        justifyContent: 'center',
-                    }}
-                    >
-                    <LeaderboardSharpIcon sx={{fontSize: 30  }}/>
-                    </ListItemIcon>
-                   
-                    <ListItemText primary="Reports" sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-                </ListItem>
-            </List> */}
         </Drawer>
-        <Box>
-        <DrawerHeader />
-        <TabContext value={value.toString()}>
-          <TabPanel value="0">
-                <h1>HOME</h1>
-            {/* <Home arraycateg={newcatlist} arrayprod={newprodlist}/> */}
-          </TabPanel>
-          <TabPanel value="1">
-            <h1>PRODUCT</h1>
-            <Product arraycateg={newcatlist} sendprodarray={newsendprodarray}/>
-          </TabPanel>
-          <TabPanel value="2">           
-            <h1>Category</h1>
-            <Category sendarray={newsendarray}/>
-          </TabPanel>
-          <TabPanel value="3">
-            <Transaction/>
-          </TabPanel>
-          <TabPanel value="4">
-            {/* <h1>STOCKS</h1> */}
-            <Stocks/>
-          </TabPanel>
-          <TabPanel value="5">
-            <h1>REPORTS</h1>
-            {/* <Category sendarray={newsendarray}/> */}
-          </TabPanel>
-        </TabContext>
+        <Box component="main" sx={{ flexGrow: 1, p: 3,  }}>
+            <DrawerHeader />
+            <TabContext value={value.toString()}>
+                <TabPanel value="0">
+                    <h1>HOME</h1>
+                    <Home sx={{width: 100}} categ={categ} productlist = {productlist}/>
+                </TabPanel>
+                <TabPanel value="1">
+                    <h1>PRODUCT</h1>
+                    <Product categ={categ} productlist = {productlist} setProductList = {setProductList}/>
+                </TabPanel>
+                <TabPanel value="2">           
+                    <h1>CATEGORY</h1>
+                    <Category setCateg={setCateg} categ={categ}/>
+                </TabPanel>
+                <TabPanel value="3">
+                    <h1>TRANSACTION</h1>
+                    <Transaction productlist = {productlist} setProductList = {setProductList}/>
+                </TabPanel>
+                <TabPanel value="4">
+                    {/* <h1>STOCKS</h1> */}
+                    <Stocks/>
+                </TabPanel>
+                <TabPanel value="5">
+                    <h1>REPORTS</h1>
+                    {/* <Category sendarray={newsendarray}/> */}
+                </TabPanel>
+            </TabContext>
         </Box>
     </Box>
 

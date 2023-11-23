@@ -69,9 +69,6 @@ const AppBar = styled(MuiAppBar, {
   }));
 
 
-
-
-
 export default function Navbar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
