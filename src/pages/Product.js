@@ -8,9 +8,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 
 
-export default function Product({categ, productlist, setProductList}){
-    const [count, setCount] = useState (1)
-  
+export default function Product({categ, productlist, setProductList, count, setCount}){
     const [formdata, setFormData] = useState({
         id: '', 
         product: '',
@@ -119,7 +117,7 @@ export default function Product({categ, productlist, setProductList}){
         },
         // hide last border
         '&:last-child td, &:last-child th': {
-          border: 2,
+        //  border: "2px black",
         },
     }));
 
@@ -129,7 +127,7 @@ export default function Product({categ, productlist, setProductList}){
             <Box sx={{ display: 'flex',  justifyContent: 'center', }}>
                 {/* <Dashboard/> */}
 
-                <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: 'white' }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 2, backgroundColor: 'white' }}>
                 {/* <h1 style={{display: "flex", marginLeft:"-1px"}}>PRODUCTS</h1> */}
             
                 <form
@@ -222,7 +220,7 @@ export default function Product({categ, productlist, setProductList}){
 
                         <Grid item xs={11.8} sm={2}>
                         <Stack direction="row" spacing={4} style={{width: "100%", alignItems: "center"}}>
-                            <Button variant="contained" sx={{p: 2, width: "100%", background:"black" }} type="submit">SUBMIT</Button>
+                            <Button variant="contained" sx={{p: 2, width: "100%", background:"black", '&:hover':{backgroundColor: '#4e9ae6'}}} type="submit">SUBMIT</Button>
                         </Stack>
                         </Grid>
                         
@@ -230,8 +228,8 @@ export default function Product({categ, productlist, setProductList}){
                     </form>
 
                     <Box height={50}/>
+                    <Box height={530} overflow="auto">
                     <Grid container />
-                    
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 700 }} aria-label="customized table">
                             <TableHead>
@@ -249,7 +247,7 @@ export default function Product({categ, productlist, setProductList}){
                                 <StyledTableRow key={index}>
                                 <StyledTableCell align="center">{product.id}</StyledTableCell>
                                 <StyledTableCell align="center">{product.product}</StyledTableCell>
-                                <StyledTableCell align="center">{product.price}</StyledTableCell>
+                                <StyledTableCell align="center">P{product.price}.00</StyledTableCell>
                                 <StyledTableCell align="center">{product.stocks}</StyledTableCell>
                                 <StyledTableCell align="center">{product.category}</StyledTableCell>
                                 <StyledTableCell align="center">
@@ -265,6 +263,7 @@ export default function Product({categ, productlist, setProductList}){
                         </Table>
                     </TableContainer>
                     <Grid/>
+                    </Box>
 
                     <Modal
                         open={Boolean(selectedProduct)}

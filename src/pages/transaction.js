@@ -1,4 +1,4 @@
-import React  from "react";
+import React, { useState }  from "react";
 import Navbar from "../components/navbar";
 import { Box } from "@mui/system";
 import {Tab, Grid, TextField, Button, Stack, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, styled, tableCellClasses, Paper,} from '@mui/material';
@@ -13,6 +13,14 @@ export default function Transaction({productlist, setProductList}){
       setValue(newValue);
     };
 
+    // const handleTransaction = () => {
+    //     const BuyProduct = productlist.map((product) => 
+    //         product.id === product.id ? {...product, buyprodlist} : product
+    //     );
+    //     setBuyProdList(BuyProduct)
+    //     console.log(buyprodlist)
+    // }
+
     const handleTransaction = (item) => {
         if (item.stocks > 0) {
           const updatedProductList = productlist.map((product) =>
@@ -22,19 +30,6 @@ export default function Transaction({productlist, setProductList}){
         }
       };
       
-    // const handleTransaction = (productlist) => {
-    //     if (productlist.stocks > 0){
-    //         const BuyProduct = productlist.map((item) => {
-    //             if (item.id === productlist.id){
-    //                 return {...item, stocks: productlist.stocks - 1 }
-    //             }
-    //             return productlist;
-            
-    //     });
-    //     setProductList(BuyProduct)
-    //     }
-    // }
-
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -52,7 +47,7 @@ export default function Transaction({productlist, setProductList}){
         },
         // hide last border
         '&:last-child td, &:last-child th': {
-          border: "2px black",
+        //   border: "2px black",
         },
     }));
 
@@ -63,7 +58,7 @@ export default function Transaction({productlist, setProductList}){
             <Navbar/>
             <Box height={5}/>
             <Box sx={{ display: 'flex', }}/>
-                <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: 'white' }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 2, backgroundColor: 'white' }}>
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -72,7 +67,8 @@ export default function Transaction({productlist, setProductList}){
                     </TabList>
                     </Box>
                     <TabPanel value="1">
-                        <h1>Buy</h1>
+                        <h1 style={{mariginTop: '-40px'}}>Buy</h1>
+                        <Box height={510} overflow="auto">
                         <Grid container />
                         <TableContainer component={Paper}>
                             <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -106,22 +102,13 @@ export default function Transaction({productlist, setProductList}){
                             </Table>
                         </TableContainer>
                         <Grid/>
-                        {/* {productlist && <>
-                            {productlist.map((item, index) => {
-                                return(
-                                    <p key = {index}> {item.product}</p>
-                                )
-                            })}
-                        </>} */}
+                        </Box>
                     </TabPanel>
                     <TabPanel value="2">
                         <h1>CART</h1>
                     </TabPanel>
               
                 </TabContext>
-
-
-
                     {/* {productlist && <>
                         {productlist.map((item, index) => {
                             return(

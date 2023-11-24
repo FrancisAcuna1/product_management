@@ -7,21 +7,22 @@ export default function Home({ categ, productlist }) {
   return (
     <>
       <Navbar />
-      <Box sx={{ display: 'flex', }}>
-        <Box component="main" sx={{ flexGrow: 1, p: 2,}}>
+      <Box sx={{ display: 'flex',}}>
+        <Box component="main" height={740}  sx={{ flexGrow: 1, p: 2, backgroundColor: 'white', }}>
           <Grid container spacing={2}>
             {categ.map((category) => {
               // Filter products by category
-              const categoryProducts = productlist.filter(
-                (product) => product.categories === category.id
-              );
+             const categoryProducts = productlist.filter((product) => 
+                product.category === category.categories
+            );
 
               return (
+             
                 <Grid item xs={12} sm={2.3} key={category.id}>
-                  <Card sx={{ maxWidth: 340, height: 150, justifyContent: "center", alignItems: "center" }}>
-                    <CardActionArea sx={{ backgroundColor: "#0288d1" }}>
+                  <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center" }}>
+                    <CardActionArea sx={{ backgroundColor: "#6D9886",}}>
                       <CardContent>
-                        <Typography gutterBottom variant="h5" component="div" sx={{ marginLeft: 2 }}>
+                        <Typography gutterBottom variant="h5" ccomponent="div" sx={{color: 'white', marginLeft: 2 }}>
                           {category.categories}
                         </Typography>
                       </CardContent>
@@ -37,6 +38,7 @@ export default function Home({ categ, productlist }) {
                     </CardActionArea>
                   </Card>
                 </Grid>
+           
               );
             })}
           </Grid>

@@ -3,13 +3,12 @@ import Dashboard from "../components/dashboard";
 import Navbar from "../components/navbar";
 import { Box, Grid, TextField, Button, Stack, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, styled, tableCellClasses, Paper, Modal} from '@mui/material';
 import { width } from "@mui/system";
-// import { width } from "@mui/system";
-// import { Delete } from "@mui/icons-material";
+
 
 
  
-export default function Category({ setCateg, categ}){
-    const [count, setCount] = useState (1)
+export default function Category({ setCateg, categ, countcateg, setCountCateg}){
+    // const [count, setCount] = useState (1)
     // const [categ, setCateg] = useState([]); // this array is nasa dashbaord na 
     const [newcateg, setNewCateg] = useState({
         id: '',
@@ -22,11 +21,11 @@ export default function Category({ setCateg, categ}){
             alert("Enter Category Value!");
         } else {
             const newcateglist = ({
-                id: count,
+                id: countcateg,
                 categories: newcateg.categories,
             });
 
-            setCount(count+1)
+            setCountCateg(countcateg+1)
             setCateg([...categ, newcateglist]);
             setNewCateg({
                 id: '',
@@ -44,7 +43,7 @@ export default function Category({ setCateg, categ}){
 
         setNewCateg({
             ...newcateg,
-            id: count,
+            id: countcateg,
             categories: value,
         });
     };
@@ -99,11 +98,12 @@ export default function Category({ setCateg, categ}){
       
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
         '&:nth-of-type(odd)': {
-          backgroundColor: theme.palette.action.hover,
+            backgroundColor: theme.palette.action.hover,
         },
         // hide last border
         '&:last-child td, &:last-child th': {
-          border: "2px black",
+        //   border: "2px black",
+          
         },
     }));
 
@@ -114,7 +114,7 @@ export default function Category({ setCateg, categ}){
             <Navbar/>
             <Box sx={{ display: 'flex', justifyContent: "center", backgroundColor: 'white'}}>
                 {/* <Dashboard/> */}
-                <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop:"-20px" }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 2, marginTop:"-20px" }}>
                     <form
                         style={{
                             display: 'flex',
@@ -136,7 +136,7 @@ export default function Category({ setCateg, categ}){
                                     id="outlined-required"
                                     label="ID"
                                     name="id"
-                                    value={count}
+                                    value={countcateg}
                                     onChange={handleNewCateg}
                                     variant="outlined"
                                     fullWidth
@@ -160,15 +160,15 @@ export default function Category({ setCateg, categ}){
                           
                             <Grid item xs={12} sm={4.7}>
                             <Stack direction="row" spacing={1} style={{width: "90%", alignItems: "center"}}>
-                                <Button variant="contained" sx={{p: 2, width: "100%", background:"black" }} type="submit">SUBMIT</Button>
+                                <Button variant="contained" sx={{p: 2, width: "100%", background:"black", '&:hover':{backgroundColor: '#4e9ae6'}}} type="submit">SUBMIT</Button>
                             </Stack>
                             </Grid>
                         </Grid>
                     </form>
 
                     <Box height={50}/>
+                    <Box height={550} overflow="auto">
                     <Grid container />
-                    
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 300}} aria-label="customized table">
                             <TableHead>
@@ -196,8 +196,8 @@ export default function Category({ setCateg, categ}){
                             </TableBody>
                         </Table>
                     </TableContainer>
-
                     <Grid/>
+                    </Box>
                     <Modal
                         open={Boolean(selectedCategory)}
                         onClose={handleCloseModal}

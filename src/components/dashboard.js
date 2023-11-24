@@ -1,25 +1,10 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import ListItemText from '@mui/material/ListItemText';
+import { styled, useTheme, Box, CssBaseline, Divider, IconButton, ListItem, ListItemIcon, } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
-// import MuiAppBar from '@mui/material/AppBar';
-// import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-// import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
-// import MailIcon from '@mui/icons-material/Mail';
-import {useNavigate} from "react-router-dom";
 import { UseApp } from './statnav';
 import HomeSharpIcon from '@mui/icons-material/HomeSharp';
 import ShoppingCartSharpIcon from '@mui/icons-material/ShoppingCartSharp';
@@ -27,7 +12,6 @@ import ClassSharpIcon from '@mui/icons-material/ClassSharp';
 import PaidSharpIcon from '@mui/icons-material/PaidSharp';
 import LeaderboardSharpIcon from '@mui/icons-material/LeaderboardSharp';
 import InventorySharpIcon from '@mui/icons-material/InventorySharp';
-import { NavLink } from "react-router-dom";
 
 import Tab from '@mui/material/Tab';
 import TabList from '@mui/lab/TabList';
@@ -106,18 +90,10 @@ export default function Dashboard() {
     };
     console.log(value)
 
-    // const [newcatlist, setNewCatList] = useState([]);
-    // const newsendarray = (arrayfromcategory) => {
-    //   setNewCatList(arrayfromcategory);
-    // };
-  
-    // const [newprodlist, setNewProdList] = useState([]);
-    // const newsendprodarray = (arrayfromprod) => {
-    //   setNewProdList(arrayfromprod);
-    // };
-
-    const [productlist, setProductList] = useState ([]); // List of Array from product list     
-    const [categ, setCateg] = useState([]); // List of Array from Category list   
+    const [productlist, setProductList] = useState ([]); // List of Array from product list
+    const [categ, setCateg] = useState([]);// List of Array from Category list        
+    const [count, setCount] = useState (1) // Count San ID sa Product
+    const [countcateg, setCountCateg] = useState (1) //Count San ID sa Category
     // const [transaction, setMgaTransaction] = useState ([]); // List of Array
 
     // -------------CLOSING--------------
@@ -133,7 +109,7 @@ export default function Dashboard() {
             </DrawerHeader>
 
             <Divider />
-            <TabContext value={value.toString()}>
+            <TabContext value={value.toString()} >
                 <TabList
                     orientation="vertical"
                     value={value}
@@ -304,19 +280,19 @@ export default function Dashboard() {
             <DrawerHeader />
             <TabContext value={value.toString()}>
                 <TabPanel value="0">
-                    <h1>HOME</h1>
+                    <h1 style={{marginTop: -30}}>DASHBOARD</h1>
                     <Home sx={{width: 100}} categ={categ} productlist = {productlist}/>
                 </TabPanel>
                 <TabPanel value="1">
-                    <h1>PRODUCT</h1>
-                    <Product categ={categ} productlist = {productlist} setProductList = {setProductList}/>
+                    <h1 style={{marginTop: -25}}>PRODUCT</h1>
+                    <Product categ={categ} productlist = {productlist} setProductList = {setProductList} setCount = {setCount} count = {count}/>
                 </TabPanel>
                 <TabPanel value="2">           
-                    <h1>CATEGORY</h1>
-                    <Category setCateg={setCateg} categ={categ}/>
+                    <h1 style={{marginTop: -25}}>CATEGORY</h1>
+                    <Category setCateg={setCateg} categ={categ} setCountCateg = {setCountCateg} countcateg = {countcateg}/>
                 </TabPanel>
                 <TabPanel value="3">
-                    <h1>TRANSACTION</h1>
+                    <h1 style={{marginTop: -25}}>TRANSACTION</h1>
                     <Transaction productlist = {productlist} setProductList = {setProductList}/>
                 </TabPanel>
                 <TabPanel value="4">
