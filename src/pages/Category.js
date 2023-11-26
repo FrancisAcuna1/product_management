@@ -15,11 +15,24 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
         categories: '',
     });
 
+    const isCategoryAdded = (category) => {
+        return categ.some((c) => c.categories === category);
+    };
+
     const handleSubmitCateg = (event) => {
         event.preventDefault();
         if (newcateg.categories === '') {
             alert("Enter Category Value!");
-        } else {
+        }
+        else if (isCategoryAdded(newcateg.categories)){
+            alert(`'${newcateg.categories}' Is Already Added!`)
+            setNewCateg({
+                id: '',
+                categories: '',
+            });
+
+        } 
+        else {
             const newcateglist = ({
                 id: countcateg,
                 categories: newcateg.categories,

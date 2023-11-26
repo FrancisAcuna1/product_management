@@ -17,11 +17,19 @@ export default function Product({categ, productlist, setProductList, count, setC
         category: '',
     }); // object array
 
+    const isProductAdded = (products) => {
+        return productlist.some((p) => p.product === products);
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault(); //in prevent sini na function na mag reload ang page 
         if (formdata.id === '' || formdata.product === '' || formdata.price === '' || formdata.stocks === '', formdata.category === ''){
             alert("Enter Value");
-        }else{
+        }
+        else if (isProductAdded(formdata.product)) {
+            alert(`'${formdata.product}' Is Already Added!`);
+        }
+        else{
             const newprod = ({
                 id: count,
                 product: formdata.product,

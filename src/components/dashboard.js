@@ -94,7 +94,7 @@ export default function Dashboard() {
     const [categ, setCateg] = useState([]);// List of Array from Category list        
     const [count, setCount] = useState (1) // Count San ID sa Product
     const [countcateg, setCountCateg] = useState (1) //Count San ID sa Category
-    // const [transaction, setMgaTransaction] = useState ([]); // List of Array
+    const [transaction, setTransaction] = useState ([]); // List of Array
 
     // -------------CLOSING--------------
 
@@ -293,7 +293,7 @@ export default function Dashboard() {
                 </TabPanel>
                 <TabPanel value="3">
                     <h1 style={{marginTop: -25}}>TRANSACTION</h1>
-                    <Transaction productlist = {productlist} setProductList = {setProductList}/>
+                    <Transaction productlist = {productlist} setProductList = {setProductList} transaction = {transaction} setTransaction = {setTransaction}/>
                 </TabPanel>
                 <TabPanel value="4">
                     {/* <h1>STOCKS</h1> */}
