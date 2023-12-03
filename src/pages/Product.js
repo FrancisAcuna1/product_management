@@ -2,13 +2,57 @@ import React, { useState }  from "react";
 import Dashboard from "../components/dashboard";
 import Navbar from "../components/navbar";
 import { Box } from "@mui/system";
-import { Button, TextField, Grid, styled, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Paper, MenuItem, Modal}from "@mui/material";
+import { Button, TextField, Grid, styled, Stack, Table, TableBody, TableContainer, TableHead, TableRow, Paper, MenuItem, Modal, Alert, Snackbar,}from "@mui/material";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { SnackbarProvider, useSnackbar,} from 'notistack';
 
 
 
 export default function Product({categ, productlist, setProductList, count, setCount}){
+    const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+    const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState(false);
+    const [updateSnackbarOpen, setUpdateSnackbarOpen] = useState(false);
+
+    const handleCloseSuccessSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+        setSuccessSnackbarOpen(false);
+    };
+    const showSuccessSnackbar = () => {
+        setSuccessSnackbarOpen(true);
+    };
+
+    const handleClosedeleteSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+        setDeleteSnackbarOpen(false);
+    };
+
+    const DeleteSnackbar = () => {
+        setDeleteSnackbarOpen(true);
+    };
+    // Closing
+
+    const handleCloseUpdateSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+
+        setUpdateSnackbarOpen(false);
+    };
+
+    const UpdateSnackbar = () => {
+        setUpdateSnackbarOpen(true);
+    };
+
+
+  
+
     const [formdata, setFormData] = useState({
         id: '', 
         product: '',
@@ -50,6 +94,8 @@ export default function Product({categ, productlist, setProductList, count, setC
             }); // In this part in reset lang niya sa empty ang mga form input once na trigger na ang button. 
 
             console.log(newprod)
+            // setSuccess(true);
+            showSuccessSnackbar();
         }
         
     };
@@ -69,6 +115,7 @@ export default function Product({categ, productlist, setProductList, count, setC
         delprodList.splice(product, 1);
         setProductList(delprodList);
         setFormData(delprodList);
+        DeleteSnackbar();
     }
 
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -101,6 +148,7 @@ export default function Product({categ, productlist, setProductList, count, setC
 
         setProductList(updatedProduct);
         handleCloseModal(); // Close the modal after updating
+        UpdateSnackbar();
     };
 
     const handleCloseModal = () => {
@@ -132,12 +180,18 @@ export default function Product({categ, productlist, setProductList, count, setC
     return(
         <>  
             <Navbar/>
+            <SnackbarProvider maxSnack={1}>
             <Box sx={{ display: 'flex',  justifyContent: 'center', }}>
                 {/* <Dashboard/> */}
 
                 <Box component="main" sx={{ flexGrow: 1, p: 2, backgroundColor: 'white' }}>
                 {/* <h1 style={{display: "flex", marginLeft:"-1px"}}>PRODUCTS</h1> */}
-            
+                {/* {succesess && (
+                        <Alert severity="success" onClose={handleClose}>
+                            <AlertTitle>Success</AlertTitle>
+                            Product added successfully!
+                        </Alert>
+                )} */}
                 <form
                     style={{
                         display: 'flex',
@@ -239,6 +293,7 @@ export default function Product({categ, productlist, setProductList, count, setC
                     <Box height={530} overflow="auto">
                     <Grid container />
                     <TableContainer component={Paper}>
+                  
                         <Table sx={{ minWidth: 700 }} aria-label="customized table">
                             <TableHead>
                             <TableRow>                            
@@ -255,13 +310,14 @@ export default function Product({categ, productlist, setProductList, count, setC
                                 <StyledTableRow key={index}>
                                 <StyledTableCell align="center">{product.id}</StyledTableCell>
                                 <StyledTableCell align="center">{product.product}</StyledTableCell>
-                                <StyledTableCell align="center">P{product.price}.00</StyledTableCell>
+                                <StyledTableCell align="center">₱ {product.price}.00</StyledTableCell>
                                 <StyledTableCell align="center">{product.stocks}</StyledTableCell>
                                 <StyledTableCell align="center">{product.category}</StyledTableCell>
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={1}  style={{width: "85%", alignItems: "center", height: 49, marginRight:"-180px" }}>
-                                        <Button variant="contained" size="small" color="success" sx={{p: 1, width: "50%",}} type="submit" onClick={() => handleEditProduct (product)}>EDIT</Button>
-                                        <Button variant="contained" size="small"  color="error" sx={{p: 1, width: "50%",}} type="submit" onClick={() => DeleteProduct (product)}>DELETE</Button>
+                                        <Button variant="contained" size="small" color="success" sx={{p: 1, width: "50%",}} type="submit" onClick={() => handleEditProduct (product)}><ModeEditOutlineOutlinedIcon sx={{marginLeft: '-10px', marginRight: '2px  '}}/>Edit</Button>
+                                        <Button variant="contained" size="small"  color="error" sx={{p: 1, width: "50%",}} type="submit" onClick={() => DeleteProduct (product)}> <DeleteOutlineIcon sx={{marginLeft: '-10px'}}/>Delete</Button>
+                                     
                                     </Stack>
                                 </StyledTableCell>
                                 
@@ -353,9 +409,50 @@ export default function Product({categ, productlist, setProductList, count, setC
 
 
                 </Box>
+                <Snackbar
+                    open={successSnackbarOpen}
+                    autoHideDuration={1000}
+                    onClose={handleCloseSuccessSnackbar}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                    <Alert onClose={handleCloseSuccessSnackbar} p={5}  sx={{ width: '100%', backgroundColor: 'green', color: 'white'}}  
+                    iconMapping={{ success: <CheckCircleOutlineIcon style={{ color: 'white' }} /> }}
+                    >
+                        Product added successfully!
+                    </Alert> 
+                </Snackbar>
+
+                <Snackbar
+                    open={deleteSnackbarOpen}
+                    autoHideDuration={1000}
+                    onClose={handleClosedeleteSnackbar}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }} 
+                    
+                    >
+                    <Alert onClose={handleClosedeleteSnackbar} sx={{ width: '100%', backgroundColor: 'red', color: 'white'}}  
+                    iconMapping={{ success: <CheckCircleOutlineIcon style={{ color: 'white' }} /> }}
+                    >
+                        Product deleted successfully!
+                    </Alert> 
+                </Snackbar>
+
+                <Snackbar
+                    open={updateSnackbarOpen}
+                    autoHideDuration={1000}
+                    onClose={handleCloseUpdateSnackbar}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }} 
+                    
+                    >
+                    <Alert onClose={handleCloseUpdateSnackbar} sx={{ width: '100%', backgroundColor: 'green', color: 'white'}}  
+                    iconMapping={{ success: <CheckCircleOutlineIcon style={{ color: 'white' }} /> }}
+                    >
+                       Product updated successfully!
+                    </Alert> 
+                </Snackbar>
                 
                
             </Box>
+            </SnackbarProvider>
            
           
            

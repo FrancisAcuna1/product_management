@@ -23,6 +23,7 @@ import Product from '../pages/Product';
 import Category from '../pages/Category';
 import Stocks from '../pages/Stocks';
 import Transaction from '../pages/transaction';
+import Report from '../pages/Report';
 
 const drawerWidth = 240;
 
@@ -95,6 +96,10 @@ export default function Dashboard() {
     const [count, setCount] = useState (1) // Count San ID sa Product
     const [countcateg, setCountCateg] = useState (1) //Count San ID sa Category
     const [transaction, setTransaction] = useState ([]); // List of Array
+    const [checkeditem, setCheckedItem] = useState ([]) //list of array for check box to handle items to place to order
+    const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true);
+    const [orderHistory, setOrderHistory] = useState([]);
+
 
     // -------------CLOSING--------------
 
@@ -293,7 +298,7 @@ export default function Dashboard() {
                 </TabPanel>
                 <TabPanel value="3">
                     <h1 style={{marginTop: -25}}>TRANSACTION</h1>
-                    <Transaction productlist = {productlist} setProductList = {setProductList} transaction = {transaction} setTransaction = {setTransaction}/>
+                    <Transaction productlist = {productlist} setProductList = {setProductList} transaction = {transaction} setTransaction = {setTransaction} setCheckedItem={setCheckedItem} checkeditem={checkeditem} setIsCheckoutDisabled={setIsCheckoutDisabled} isCheckoutDisabled={isCheckoutDisabled} orderHistory={orderHistory} setOrderHistory={setOrderHistory}/>
                 </TabPanel>
                 <TabPanel value="4">
                     {/* <h1>STOCKS</h1> */}
@@ -301,7 +306,7 @@ export default function Dashboard() {
                 </TabPanel>
                 <TabPanel value="5">
                     <h1>REPORTS</h1>
-                    {/* <Category sendarray={newsendarray}/> */}
+                    <Report orderHistory={orderHistory} setOrderHistory={setOrderHistory} />
                 </TabPanel>
             </TabContext>
         </Box>

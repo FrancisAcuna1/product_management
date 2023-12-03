@@ -2,11 +2,12 @@ import React from "react";
 import Dashboard from "./components/dashboard";
 import Navbar from "./components/navbar";
 import { createTheme, ThemeProvider } from '@mui/material';
-
+import Buy from './pages/Buy'
 const theme = createTheme({
   typography: {
     fontFamily: [
-      'Poppins',
+      'Open Sans',
+      'sans serif'
     ].join(','),
   },});
 
@@ -19,6 +20,8 @@ function App() {
       <div style={{height: "100vh", backgroundColor: "#eeee"}}>
         <Navbar/>
         <Dashboard/>  
+        
+
       </div>
     </ThemeProvider>
     </>
