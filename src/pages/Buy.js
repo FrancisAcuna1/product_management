@@ -1,31 +1,41 @@
-// import * as React from 'react';
-// import { Bar } from 'react-chartjs-2';
+import * as React from 'react';
+import { DataGrid } from '@mui/x-data-grid';
 
-// export default function BasicBars() {
-//    const data = {
-//       labels: productlist.map(o => o.name),
-//       datasets: [
-//         {
-//           label: 'Products',
-//           backgroundColor: 'rgba(0, 255, 0, 0.2)',
-//           borderColor: 'rgb(0, 255, 0)',
-//           borderWidth: 1,
-//           data: productlist.map(o => o.stock)
-//         }
-//       ]
-//     }
-//     const options = {
-//       plugins: {
-//         title: {
-//           display: true,
-//           text: 'Bar Chart'
-//         }
-//       }
-//     }
-//   return (
-//     <Bar
-//       data={data}
-//       options={options}
-//     /> 
-//   );
-// }
+const columns = [
+  { field: 'id', headerName: 'ID', width: 100 },
+  { field: 'product', headerName: 'Product Name', width: 130 },
+  { field: 'price', headerName: 'Price', width: 130 },
+  { field: 'stocks', headerName: 'Quantity', width: 90 },
+  {
+    field: 'totalPrice',
+    headerName: 'Total Price',
+    type: 'number',
+    width: 160,
+  },
+];
+
+export default function Cart({ orderHistory }) {
+  const rows = orderHistory.reduce((acc, order, index) => {
+    // Flatten the items array in each order
+    const orderItems = order.items.map((item) => ({
+      id: item.id,
+      product: item.product,
+      price: item.price,
+      stocks: item.stocks,
+      totalPrice: item.price * item.stocks, 
+    }));
+
+    // Concatenate the flattened items to the accumulated rows
+    return acc.concat();
+  }, []);
+  return (
+    <div style={{ height: 400, width: '80%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5, 10]}
+      />
+    </div>
+  );
+}

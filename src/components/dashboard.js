@@ -17,7 +17,6 @@ import Tab from '@mui/material/Tab';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
-
 import Home from '../pages/Home';
 import Product from '../pages/Product';
 import Category from '../pages/Category';
@@ -114,7 +113,7 @@ export default function Dashboard() {
             </DrawerHeader>
 
             <Divider />
-            <TabContext value={value.toString()} >
+            <TabContext value={value.toString()}>
                 <TabList
                     orientation="vertical"
                     value={value}
@@ -122,7 +121,7 @@ export default function Dashboard() {
                     aria-label="Vertical tabs example"
                     sx={{ borderRight: 1, borderColor: 'divider', marginTop:3 }}
                 >
-                   <Tab 
+                   <Tab
                         label={
                             <ListItem                
                                 sx={{
@@ -140,9 +139,9 @@ export default function Dashboard() {
                                             justifyContent: 'center',
                                         }}
                                         >
-                                        <HomeSharpIcon sx={{fontSize: 30, marginLeft: -2.9}}/>
+                                        <HomeSharpIcon color="primary" sx={{fontSize: 30, marginLeft: -2.9,}}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Home" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Home" sx={{ color: '#0d47a1', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -168,7 +167,7 @@ export default function Dashboard() {
                                         >
                                         <ShoppingCartSharpIcon sx={{fontSize: 30, marginLeft: -2.9 }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Product" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />       
+                                        <ListItemText primary="Product" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />       
                             </React.Fragment>   
                             </ListItem>  
                         }
@@ -192,9 +191,9 @@ export default function Dashboard() {
                                             justifyContent: 'center',
                                         }}
                                         >
-                                        <ClassSharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
+                                        <ClassSharpIcon sx={{fontSize: 30, marginLeft: -2.9,  }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Category" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Category" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -220,7 +219,7 @@ export default function Dashboard() {
                                         >
                                         <PaidSharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Transaction" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Transaction" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -246,7 +245,7 @@ export default function Dashboard() {
                                         >
                                         <InventorySharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Stocks" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Stocks" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -272,7 +271,7 @@ export default function Dashboard() {
                                         >
                                         <LeaderboardSharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Reports" sx={{ alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Reports" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -301,11 +300,11 @@ export default function Dashboard() {
                     <Transaction productlist = {productlist} setProductList = {setProductList} transaction = {transaction} setTransaction = {setTransaction} setCheckedItem={setCheckedItem} checkeditem={checkeditem} setIsCheckoutDisabled={setIsCheckoutDisabled} isCheckoutDisabled={isCheckoutDisabled} orderHistory={orderHistory} setOrderHistory={setOrderHistory}/>
                 </TabPanel>
                 <TabPanel value="4">
-                    {/* <h1>STOCKS</h1> */}
-                    <Stocks/>
+                    <h1 style={{marginTop: -25}}>STOCKS</h1>
+                    <Stocks productlist = {productlist} setProductList = {setProductList} setCateg={setCateg} categ={categ} />
                 </TabPanel>
                 <TabPanel value="5">
-                    <h1>REPORTS</h1>
+                    <h1 style={{marginTop: -25}}>REPORTS</h1>
                     <Report orderHistory={orderHistory} setOrderHistory={setOrderHistory} />
                 </TabPanel>
             </TabContext>

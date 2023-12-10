@@ -3,6 +3,7 @@ import Dashboard from "./components/dashboard";
 import Navbar from "./components/navbar";
 import { createTheme, ThemeProvider } from '@mui/material';
 import Buy from './pages/Buy'
+import Cart from './pages/Cart'
 const theme = createTheme({
   typography: {
     fontFamily: [
@@ -20,7 +21,7 @@ function App() {
       <div style={{height: "100vh", backgroundColor: "#eeee"}}>
         <Navbar/>
         <Dashboard/>  
-        
+        {/* <Cart/> */}
 
       </div>
     </ThemeProvider>

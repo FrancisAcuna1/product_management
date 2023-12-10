@@ -8,6 +8,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { SnackbarProvider, useSnackbar,} from 'notistack';
+import Swal from 'sweetalert2'
 
 
 
@@ -71,12 +72,30 @@ export default function Product({categ, productlist, setProductList, count, setC
             alert("Enter Value");
         }
         else if (isProductAdded(formdata.product)) {
-            alert(`'${formdata.product}' Is Already Added!`);
+            Swal.fire({
+                title: "Error!",
+                text: `'${formdata.product}' is already Added. Please check and try again.`,
+                icon: "error",
+                timer: 2500,
+                width: 400,
+              });
+              return; // Stop further execution
+        }
+        else if(formdata.price < 0 || formdata.stocks < 0) {
+            // Handle the case where a negative price is found
+            Swal.fire({
+              title: "Error!",
+              text: "Negative Price is not accepted. Please check and try again.",
+              icon: "error",
+              timer: 2500,
+              width: 450,
+            });
+            return;
         }
         else{
             const newprod = ({
                 id: count,
-                product: formdata.product,
+                product: formdata.product,  
                 price: formdata.price,
                 stocks: formdata.stocks,
                 category: formdata.category,
@@ -182,16 +201,7 @@ export default function Product({categ, productlist, setProductList, count, setC
             <Navbar/>
             <SnackbarProvider maxSnack={1}>
             <Box sx={{ display: 'flex',  justifyContent: 'center', }}>
-                {/* <Dashboard/> */}
-
                 <Box component="main" sx={{ flexGrow: 1, p: 2, backgroundColor: 'white' }}>
-                {/* <h1 style={{display: "flex", marginLeft:"-1px"}}>PRODUCTS</h1> */}
-                {/* {succesess && (
-                        <Alert severity="success" onClose={handleClose}>
-                            <AlertTitle>Success</AlertTitle>
-                            Product added successfully!
-                        </Alert>
-                )} */}
                 <form
                     style={{
                         display: 'flex',

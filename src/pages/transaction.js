@@ -1,11 +1,12 @@
 import React, { useState, useEffect} from "react";
 import Navbar from "../components/navbar";
-import {Box, Grid, Button, Stack, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, styled, tableCellClasses, Paper, Typography, ListItemIcon, ListItem, ListItemText, Checkbox, Modal, Snackbar,Alert} from "@mui/material";
+import {Box, Grid, Button, Stack, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, styled, tableCellClasses, Paper, Typography, ListItemIcon, ListItem, ListItemText, Checkbox, Modal, Snackbar,Alert,Badge} from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Tab } from "@mui/material";
 import LocalMallSharpIcon from '@mui/icons-material/LocalMallSharp';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import StorefrontSharpIcon from '@mui/icons-material/StorefrontSharp';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -25,7 +26,7 @@ export default function Transaction({
   setOrderHistory
 }) {
   const [value, setValue] = React.useState("1");
-  // const [isModalOpen, setModalOpen] = useState(false);
+  const [latestOrderId, setLatestOrderId] = useState('1')
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [removeSnackbarOpen, setRemoveSnackbarOpen] = useState(false);
 
@@ -142,7 +143,8 @@ export default function Transaction({
     
 
     const PlacetoOrder = () => {
-      const checkedID =checkeditem.map(((item) => item.id))
+      const checkedID = checkeditem.map(((item) => item.id))
+
       setOrderHistory ((prevOrderHistory) => [
         ...prevOrderHistory,
         {
@@ -160,9 +162,10 @@ export default function Transaction({
       });
       
       setCheckedItem([]);
+     
     }
+    console.log(checkeditem);
     
- 
 
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -180,7 +183,6 @@ export default function Transaction({
       backgroundColor: theme.palette.action.hover,
     },
   }));
-
   return (
     <>
       <Navbar />
@@ -242,9 +244,13 @@ export default function Transaction({
                                             justifyContent: 'center',
                                         }}
                                         >
-                                        <LocalMallSharpIcon sx={{fontSize: 30, marginLeft: -2, marginRight: 0.5,  color: '#ff3d00'}}/>
+                                          <Badge badgeContent={transaction.length} color="error">
+                                            <ShoppingCartIcon sx={{fontSize: 30, marginLeft: -2, marginRight: 0.5,  color: '#ff3d00'}}/>
+                                          </Badge>
+
+                                        {/* <LocalMallSharpIcon sx={{fontSize: 30, marginLeft: -2, marginRight: 0.5,  color: '#ff3d00'}}/> */}
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Cart" sx={{ alignItems: "center"}} />
+                                        <ListItemText primary="Cart" sx={{ alignItems: "center", marginTop: '8px'}} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -382,9 +388,6 @@ export default function Transaction({
                 <hr style={{}}/>
                
                 {transaction.map((item, index) => (
-                   item.checked === !item.checked ? 
-                   (<>asdasasd</>) 
-                :
                 <React.Fragment key={index}>
                     <Grid
                     container
