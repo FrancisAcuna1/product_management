@@ -187,8 +187,13 @@ export default function Product({categ, productlist, setProductList, count, setC
     }));
       
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
+        '&:nth-of-type(even)': {
+            backgroundColor: '#9daccc', // Set your desired transparent background color for even rows
+       
+        },
+
         '&:nth-of-type(odd)': {
-          backgroundColor: theme.palette.action.hover,
+          backgroundColor: '#c1c9db',
         },
         // hide last border
         '&:last-child td, &:last-child th': {
@@ -201,7 +206,7 @@ export default function Product({categ, productlist, setProductList, count, setC
             <Navbar/>
             <SnackbarProvider maxSnack={1}>
             <Box sx={{ display: 'flex',  justifyContent: 'center', }}>
-                <Box component="main" sx={{ flexGrow: 1, p: 2, backgroundColor: 'white' }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 2, }}>
                 <form
                     style={{
                         display: 'flex',
@@ -325,8 +330,8 @@ export default function Product({categ, productlist, setProductList, count, setC
                                 <StyledTableCell align="center">{product.category}</StyledTableCell>
                                 <StyledTableCell align="center">
                                     <Stack direction="row" spacing={1}  style={{width: "85%", alignItems: "center", height: 49, marginRight:"-180px" }}>
-                                        <Button variant="contained" size="small" color="success" sx={{p: 1, width: "50%",}} type="submit" onClick={() => handleEditProduct (product)}><ModeEditOutlineOutlinedIcon sx={{marginLeft: '-10px', marginRight: '2px  '}}/>Edit</Button>
-                                        <Button variant="contained" size="small"  color="error" sx={{p: 1, width: "50%",}} type="submit" onClick={() => DeleteProduct (product)}> <DeleteOutlineIcon sx={{marginLeft: '-10px'}}/>Delete</Button>
+                                        <Button variant="contained" size="small" sx={{p: 1, width: "50%", backgroundColor:"#394d7d", color:'white'}} type="submit" onClick={() => handleEditProduct (product)}><ModeEditOutlineOutlinedIcon sx={{marginLeft: '-10px', marginRight: '2px', color:'white'}}/>Edit</Button>
+                                        <Button variant="contained" size="small"  sx={{p: 1, width: "50%", backgroundColor:"#e53935", color:'white'}} type="submit" onClick={() => DeleteProduct (product)}> <DeleteOutlineIcon sx={{marginLeft: '-10px'}}/>Delete</Button>
                                      
                                     </Stack>
                                 </StyledTableCell>

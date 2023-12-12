@@ -18,7 +18,7 @@ function App() {
   return (
     <>
     <ThemeProvider theme={theme}>
-      <div style={{height: "100vh", backgroundColor: "#eeee"}}>
+      <div style={{height: "100vh", backgroundColor: "#becccf"}}>
         <Navbar/>
         <Dashboard/>  
         {/* <Cart/> */}

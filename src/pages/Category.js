@@ -152,13 +152,17 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
     }));
       
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
+        '&:nth-of-type(even)': {
+            backgroundColor: '#9daccc', // Set your desired transparent background color for even rows
+       
+        },
+
         '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.action.hover,
+          backgroundColor: '#c1c9db',
         },
         // hide last border
         '&:last-child td, &:last-child th': {
-        //   border: "2px black",
-          
+        //  border: "2px black",
         },
     }));
 
@@ -168,7 +172,7 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
         <>  
             <Navbar/>
             <SnackbarProvider maxSnack={1}>
-            <Box sx={{ display: 'flex', justifyContent: "center", backgroundColor: 'white'}}>
+            <Box sx={{ display: 'flex', justifyContent: "center",}}>
                 {/* <Dashboard/> */}
                 <Box component="main" sx={{ flexGrow: 1, p: 2, marginTop:"-20px" }}>
                     <form
@@ -242,8 +246,8 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
                                 <StyledTableCell align="center">
 
                                     <Stack direction="row" spacing={1}  style={{display: "flex", justifyContent:"center", width: "100%", alignItems: "center", height: 35,}}>
-                                        <Button variant="contained" size="small" color="success" sx={{p: 1, width: "10%", justifyContent:"center", alignItems:"center"}} type="submit" onClick={() => handleEditCategory(categlist)}><ModeEditOutlineOutlinedIcon sx={{marginLeft: '-10px', marginRight: '2px'}}/>EDIT</Button>
-                                        <Button variant="contained" size="small"  color="error" sx={{p: 1, width: "10%", justifyContent:"center", alignItems:"center"}} type="submit" onClick={() => DeleteCategory(value)}><DeleteOutlineIcon sx={{marginLeft: '-5px'}}/>DELETE</Button>
+                                        <Button variant="contained" size="small" sx={{p: 1, width: "10%", justifyContent:"center", alignItems:"center", backgroundColor:"#394d7d", color:'white'}} type="submit" onClick={() => handleEditCategory(categlist)}><ModeEditOutlineOutlinedIcon sx={{marginLeft: '-10px', marginRight: '2px',}}/>EDIT</Button>
+                                        <Button variant="contained" size="small" sx={{p: 1, width: "10%", justifyContent:"center", alignItems:"center", backgroundColor:"#e53935", color:'white'}} type="submit" onClick={() => DeleteCategory(value)}><DeleteOutlineIcon sx={{marginLeft: '-5px'}}/>DELETE</Button>
                                     </Stack>
                                 </StyledTableCell>
                                 

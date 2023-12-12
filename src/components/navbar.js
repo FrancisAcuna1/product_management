@@ -57,7 +57,7 @@ const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
   })(({theme }) => ({
     zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: 'black'
+    backgroundColor: '#031238'
    
   }));
 

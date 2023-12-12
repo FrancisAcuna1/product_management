@@ -3,15 +3,21 @@ import Navbar from "../components/navbar";
 import { Box } from "@mui/system";
 import { DataGrid } from '@mui/x-data-grid';
 
-export default function Report({ orderHistory, setOrderHistory, date }) {
+export default function Report({ orderHistory,}) {
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 100, align: "center" },
-    { field: 'product', headerName: 'Product Name', width: 150, align: "center"},
-    { field: 'price', headerName: 'Price', width: 120, align: "center" },
-    { field: 'stocks', headerName: 'Quantity', width: 100, align: "center"},
-    { field: 'totalPrice', headerName: 'Total Price', type: 'number', width: 160, align: "center" },
-    { field: 'status', headerName: 'Status', width: 100, align: "center"},
+    { field: 'id', headerName: 'ID', minWidth: 110, align: "center", flex: 1},
+    { field: 'product', headerName: 'Product Name', minWidth: 170, align: "center", flex: 1},
+    { field: 'price', headerName: 'Price', minWidth: 170, align: "center", flex: 1 },
+    { field: 'stocks', headerName: 'Quantity', minWidth: 170, align: "center", flex: 1},
+    { field: 'totalPrice', headerName: 'Total Price',type: "number", minWidth: 170, align: "center", flex: 1 },
+    { field: 'status', headerName: 'Status', minWidth: 170, align: "center", flex: 1,    sortable: false,
+    renderCell: (params) => (
+      <div style={{ color: 'green' }}>
+        {params.value}
+      </div>
+    ),
+    },
   ];
 
 
@@ -34,19 +40,46 @@ export default function Report({ orderHistory, setOrderHistory, date }) {
     <>
       <Navbar />
       <Box sx={{ display: 'flex' }}>
-        <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: 'white', height: '75vh' }}>
-          {console.log(orderHistory)}
+        <Box
+            component="main" 
+            sx={{ flexGrow: 1, p: 2, height: "75vh",}}
+          >
             <DataGrid
-              height={500}
-              maxWidth={700}
-              sx={{backgroundColor: 'gray', alignContent: 'center', justifyContent: 'center', alignItems: 'center'}}
+              height={600}
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                "& .MuiDataGrid-header .table-header": {
+                  border: "1px solid black",
+                  width: "100%",
+                      
+                },
+                "& .MuiDataGrid-columnHeader": {
+                  backgroundColor: "black",
+                  color: "white",
+                  fontWeight: "bold",
+                },
+                "& .MuiDataGrid-sortIcon":{
+                  color: 'white'
+                },
+                "& .MuiDataGrid-menuIconButton":{
+                  color: 'white',
+                  opacity: 1
+                },
+                "& .MuiDataGrid-cell .table-cell": {
+                  border: "1px solid black",
+                },
+              }}
               rows={rows}
               columns={columns}
               pageSize={5}
               rowsPerPageOptions={[5, 10]}
-              sortingOrder={['asc', 'desc']}
+              sortingOrder={["asc", "desc"]}
             />
         </Box>
+
+
       </Box>
     </>
   );

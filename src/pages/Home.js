@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from "../components/navbar";
 import { Box } from "@mui/system";
 import { Card, Grid, CardContent, Typography, CardActionArea, ListItemIcon } from '@mui/material';
@@ -14,8 +14,25 @@ import Chart from 'react-apexcharts';
 
 // import {BarChart}  from '@mui/x-charts/BarChart';
 
-export default function Home({ categ, productlist }) {
+export default function Home({ categ, productlist, orderHistory }) {
   const totalProducts = productlist;
+  const [totalIncome, setTotalIncome] = useState(0);
+  const CalculateIncome = () =>{
+    const Total = orderHistory.reduce((acc, order) =>{
+      return acc + orderHistory.reduce((index, item) =>{
+        return index + item.stocks * item.price;
+      }, 0);
+    }, 0);
+    setTotalIncome(Total);
+    console.log("Total income updated:", Total);
+  }
+  
+
+   React.useEffect(()=>{
+    CalculateIncome();
+   }, [orderHistory]);
+  
+  
   // const DataStocks = productlist.map((item) => ({
   //   timestamp: item.id,
   //   stocks: item.stocks
@@ -57,6 +74,8 @@ export default function Home({ categ, productlist }) {
   // ];
 
   // THIS CODE IS FOR LINECHART
+
+
   const uniqueCategories = [...new Set(productlist.map(p => p.category))];
 
   const hasStocks = uniqueCategories.some(category => {
@@ -116,8 +135,8 @@ export default function Home({ categ, productlist }) {
         <Box component="main" height={230}  sx={{ flexGrow: 1, p: 2, }}>
           <Grid container spacing={2}>
             <Grid item xs={3}>
-              <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center",  }}>
-                <CardActionArea sx={{ backgroundColor: "#01579b",}}>
+              <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center", borderRadius: 0 }}>
+                <CardActionArea sx={{ backgroundColor: "#0288d1",}}>
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div" sx={{color: 'white', marginLeft: 2 }}>
                        Products
@@ -149,8 +168,8 @@ export default function Home({ categ, productlist }) {
             </Grid>           
 
             <Grid item xs={12} sm={3}>
-              <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center" }}>
-                <CardActionArea sx={{ backgroundColor: "#00695c",}}>
+              <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center", borderRadius: 0 }}>
+                <CardActionArea sx={{ backgroundColor: "#00796b",}}>
                   <CardContent>
                     <Typography gutterBottom variant="h5" ccomponent="div" sx={{color: 'white', marginLeft: 2 }}>
                           {/* {category.categories} */}
@@ -181,12 +200,12 @@ export default function Home({ categ, productlist }) {
             </Grid>
 
             <Grid item xs={12} sm={3}>
-              <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center" }}>
-                <CardActionArea sx={{ backgroundColor: "#e64a19",}}>
+              <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center", borderRadius: 0 }}>
+                <CardActionArea sx={{ backgroundColor: "#9c27b0",}}>
                   <CardContent>
                     <Typography gutterBottom variant="h5" ccomponent="div" sx={{color: 'white', marginLeft: 2 }}>
                           {/* {category.categories} */}
-                          Transaction
+                          Income
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -200,10 +219,10 @@ export default function Home({ categ, productlist }) {
                                 marginTop: '-6px'
                               }}
                               >
-                          <PaidSharpIcon color="error" sx={{color: '#e65100', fontSize: 30, display: 'flex', alignItems: 'center', justifyContent: 'center',  marginRight: '8px' }}/>
+                          <PaidSharpIcon sx={{color: '#9c27b0', fontSize: 30, display: 'flex', alignItems: 'center', justifyContent: 'center',  marginRight: '8px' }}/>
                           <Typography variant="body2" color="text.secondary" sx={{ fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '5px',}}>
                               {/* Total Products: {categoryProducts.length} */}
-                              Total Transaction: 
+                              Total Income: ${totalIncome.toFixed(2)}
                           
                           </Typography>
                       </ListItemIcon> 
@@ -214,8 +233,8 @@ export default function Home({ categ, productlist }) {
             </Grid>
 
             <Grid item xs={12} sm={3}>
-              <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center" }}>
-                <CardActionArea sx={{ backgroundColor: "#ff9100",}}>
+              <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center", borderRadius: 0,}}>
+                <CardActionArea sx={{ backgroundColor: "#4a148c",}}>
                   <CardContent>
                     <Typography gutterBottom variant="h5" ccomponent="div" sx={{color: 'white', marginLeft: 2 }}>
                           {/* {category.categories} */}
@@ -233,10 +252,10 @@ export default function Home({ categ, productlist }) {
                                 marginTop: '-6px'
                               }}
                               >
-                          <TimelineSharpIcon color="error" sx={{color: '#ff9100', fontSize: 30, display: 'flex', alignItems: 'center', justifyContent: 'center',  marginRight: '8px' }}/>
+                          <TimelineSharpIcon sx={{color: '#4a148c', fontSize: 30, display: 'flex', alignItems: 'center', justifyContent: 'center',  marginRight: '8px' }}/>
                           <Typography variant="body2" color="text.secondary" sx={{ fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '5px',}}>
                               {/* Total Products: {categoryProducts.length} */}
-                              Total Transaction: 
+                              Total Sales: 
                           
                           </Typography>
                       </ListItemIcon> 
@@ -249,33 +268,36 @@ export default function Home({ categ, productlist }) {
 
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-            <Card height={450} MaxWidth={500}  overflow="auto"   sx={{  marginTop: '20px',  justifyContent: "center", alignItems: "center"}}>
+            <Card height={450} MaxWidth={500}  overflow="auto"   sx={{  marginTop: '20px',  justifyContent: "center", alignItems: "center", }}>
                 <BarChart
                       xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C',] }]}
-                      series={[{ data: [4, 3, 5, ] }, { data: [1, 6, 3, ] }, { data: [2, 5, 6] }, { data: [2, 2, 6] }]}
+                      series={[{ data: [4, 3, 5, ] }, { data: [1, 6, 3, ] }, { data: [2, 5, 6] }, { data: [2, 2, 6] }, ]}
                       MaxWidth={900}
                       height={474}
                       overflow="auto"  
+                      sx={{color: 'white'}}
                     />
               </Card>
             </Grid>
 
             <Grid item xs={12} sm={6}>
-            <Card height={450} maxWidth={100} overflow="auto"  sx={{  marginTop: '20px',  justifyContent: "center", alignItems: "center", marginRight: "30px", }}>
+            <Card height={450} maxWidth={100} overflow="auto"  sx={{  marginTop: '20px',  justifyContent: "center", alignItems: "center", marginRight: "30px" }}>
               {hasStocks ? (
-                 <LineChart
-                 options={options}
-                 series={series}
-                 MaxWidth={620}
-                 height={474}
-               />
-              //  <Chart
-              //   options={options}
-              //   series={series}
-              //   type="line"
-              // />
+              //    <LineChart
+              //    options={options}
+              //    series={series}
+              //    MaxWidth={620}
+              //    height={474}
+              //  />
+               <Chart
+                options={options}
+                series={series}
+                type="line"
+                MaxWidth={620}
+                height={462}
+              />
               ):(
-                <Typography variant="body2" color="text.secondary"  sx={{height: '470px', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '5px',}}>
+                <Typography variant="body2" color="text.secondary"  sx={{height: '470px', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '5px', }}>
                 No stocks available.
               </Typography>
               )}

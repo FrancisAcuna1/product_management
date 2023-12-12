@@ -57,23 +57,54 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
-    ...(open && {
-      ...openedMixin(theme),
-      '& .MuiDrawer-paper': openedMixin(theme),
-    }),
-    ...(!open && {
-      ...closedMixin(theme),
-      '& .MuiDrawer-paper': closedMixin(theme),
-    }),
-  }),
-);
+// const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+//   ({ theme, open }) => ({
+//     width: drawerWidth,
+//     flexShrink: 0,
+//     whiteSpace: 'nowrap',
+//     boxSizing: 'border-box',
+//     ...(open && {
+//       ...openedMixin(theme),
+//       '& .MuiDrawer-paper': openedMixin(theme),
+//     }),
+//     ...(!open && {
+//       ...closedMixin(theme),
+//       '& .MuiDrawer-paper': closedMixin(theme),
+//     }),
+//   }),
+// );
 
+// ... (your existing code)
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+      width: drawerWidth,
+      flexShrink: 0,
+      whiteSpace: 'nowrap',
+      boxSizing: 'border-box',
+      backgroundColor: '#2f4975', // Set your desired background color here
+      color: '#fff', // Set your desired text color here
+      ...(open && {
+        ...openedMixin(theme),
+        '& .MuiDrawer-paper': {
+          ...openedMixin(theme),
+          backgroundColor: '#2f4975', // Set your desired background color when open
+          color: '#fff', // Set your desired text color when open
+        },
+      }),
+      ...(!open && {
+        ...closedMixin(theme),
+        '& .MuiDrawer-paper': {
+          ...closedMixin(theme),
+          backgroundColor: '#2f4975', // Set your desired background color when closed
+          color: '#fff', // Set your desired text color when closed
+        },
+      }),
+    }),
+  );
+  
+  // ... (your existing code)
+  
 
 
 export default function Dashboard() {
@@ -106,6 +137,7 @@ export default function Dashboard() {
         <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Drawer variant="permanent" open={open}>
+            
             <DrawerHeader>
             <IconButton>
                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -119,9 +151,10 @@ export default function Dashboard() {
                     value={value}
                     onChange={handleChange}
                     aria-label="Vertical tabs example"
-                    sx={{ borderRight: 1, borderColor: 'divider', marginTop:3 }}
+                    sx={{ borderRight: 1, borderColor: 'divider', marginTop:3,}}
                 >
                    <Tab
+                        sx={{backgroundColor:''}}
                         label={
                             <ListItem                
                                 sx={{
@@ -141,7 +174,7 @@ export default function Dashboard() {
                                         >
                                         <HomeSharpIcon color="primary" sx={{fontSize: 30, marginLeft: -2.9,}}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Home" sx={{ color: '#0d47a1', alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Home" sx={{ color: 'white', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -165,9 +198,9 @@ export default function Dashboard() {
                                             justifyContent: 'center',
                                         }}
                                         >
-                                        <ShoppingCartSharpIcon sx={{fontSize: 30, marginLeft: -2.9 }}/>
+                                        <ShoppingCartSharpIcon sx={{fontSize: 30, marginLeft: -2.9, color: '#bcbfcc' }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Product" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />       
+                                        <ListItemText primary="Product" sx={{color: 'white', alignItems: "center", opacity: open ? 1 : 0 }} />       
                             </React.Fragment>   
                             </ListItem>  
                         }
@@ -191,9 +224,9 @@ export default function Dashboard() {
                                             justifyContent: 'center',
                                         }}
                                         >
-                                        <ClassSharpIcon sx={{fontSize: 30, marginLeft: -2.9,  }}/>
+                                        <ClassSharpIcon sx={{fontSize: 30, marginLeft: -2.9, color: '#bcbfcc' }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Category" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Category" sx={{color: 'white', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -217,9 +250,9 @@ export default function Dashboard() {
                                             justifyContent: 'center',
                                         }}
                                         >
-                                        <PaidSharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
+                                        <PaidSharpIcon sx={{fontSize: 30, marginLeft: -2.9, color: '#bcbfcc'  }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Transaction" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Transaction" sx={{color: 'white', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -243,9 +276,9 @@ export default function Dashboard() {
                                             justifyContent: 'center',
                                         }}
                                         >
-                                        <InventorySharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
+                                        <InventorySharpIcon sx={{fontSize: 30, marginLeft: -2.9, color: '#bcbfcc'  }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Stocks" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Stocks" sx={{color: 'white', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -269,9 +302,9 @@ export default function Dashboard() {
                                             justifyContent: 'center',
                                         }}
                                         >
-                                        <LeaderboardSharpIcon sx={{fontSize: 30, marginLeft: -2.9  }}/>
+                                        <LeaderboardSharpIcon sx={{fontSize: 30, marginLeft: -2.9, color: '#bcbfcc'  }}/>
                                         </ListItemIcon>                   
-                                        <ListItemText primary="Reports" sx={{color: '#212121', alignItems: "center", opacity: open ? 1 : 0 }} />
+                                        <ListItemText primary="Reports" sx={{color: 'white', alignItems: "center", opacity: open ? 1 : 0 }} />
                                   
                             </React.Fragment>
                             </ListItem>  
@@ -284,8 +317,8 @@ export default function Dashboard() {
             <DrawerHeader />
             <TabContext value={value.toString()}>
                 <TabPanel value="0">
-                    <h1 style={{marginTop: -30}}>DASHBOARD</h1>
-                    <Home sx={{width: 100}} categ={categ} productlist = {productlist}/>
+                    <h1 style={{marginTop: -30,}} >My Dashboard</h1>
+                    <Home sx={{width: 100}} categ={categ} productlist = {productlist} orderHistory={orderHistory} />
                 </TabPanel>
                 <TabPanel value="1">
                     <h1 style={{marginTop: -25}}>PRODUCT</h1>

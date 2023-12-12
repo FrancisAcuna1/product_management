@@ -74,8 +74,13 @@ export default function Stocks({productlist, setProductList,  categ, setCateg}){
     }));
       
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
+        '&:nth-of-type(even)': {
+            backgroundColor: '#9daccc', // Set your desired transparent background color for even rows
+       
+        },
+
         '&:nth-of-type(odd)': {
-          backgroundColor: theme.palette.action.hover,
+          backgroundColor: '#c1c9db',
         },
         // hide last border
         '&:last-child td, &:last-child th': {
@@ -87,7 +92,7 @@ export default function Stocks({productlist, setProductList,  categ, setCateg}){
             <Navbar/>
             <SnackbarProvider maxSnack={1}>
                 <Box sx={{ display: 'flex',  justifyContent: 'center', }}>
-                    <Box component="main" sx={{ flexGrow: 1, p: 2, backgroundColor: 'white', height: '77vh'}}>
+                    <Box component="main" sx={{ flexGrow: 1, p: 2,}}>
                         <Box height={530} overflow="auto">
                             <Grid container />
                             <TableContainer component={Paper}>
@@ -113,7 +118,7 @@ export default function Stocks({productlist, setProductList,  categ, setCateg}){
                                         <StyledTableCell align="center">{product.category}</StyledTableCell>
                                         <StyledTableCell align="center">
                                             <Stack direction="row" spacing={1}  style={{width: "85%", alignItems: "center", height: 49, justifyContent: 'end', marginLeft: '-32px' }}>
-                                                <Button variant="contained" size="small" color="success" sx={{p: 1, width: "50%", }} type="submit" onClick={() => handleEditProduct (product)}><ModeEditOutlineOutlinedIcon sx={{marginLeft: '-10px', marginRight: '2px  '}}/>Edit</Button>
+                                                <Button variant="contained" size="small" sx={{p: 1, width: "50%", backgroundColor:"#394d7d", color:'white'}} type="submit" onClick={() => handleEditProduct (product)}><ModeEditOutlineOutlinedIcon sx={{marginLeft: '-10px', marginRight: '2px  '}}/>Edit</Button>
                                             </Stack>
                                         </StyledTableCell>
                                         

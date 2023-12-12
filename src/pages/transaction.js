@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef} from "react";
 import Navbar from "../components/navbar";
 import {Box, Grid, Button, Stack, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, styled, tableCellClasses, Paper, Typography, ListItemIcon, ListItem, ListItemText, Checkbox, Modal, Snackbar,Alert,Badge} from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
@@ -26,7 +26,7 @@ export default function Transaction({
   setOrderHistory
 }) {
   const [value, setValue] = React.useState("1");
-  const [latestOrderId, setLatestOrderId] = useState('1')
+  // const [latestOrderId, setLatestOrderId] = useState('1')
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [removeSnackbarOpen, setRemoveSnackbarOpen] = useState(false);
 
@@ -59,7 +59,7 @@ export default function Transaction({
     if (item.stocks > 0) {
       const updatedProductList = productlist.map((product) =>
         product.id === item.id
-          ? { ...product, stocks: product.stocks - 1 }
+          ? { ...product, stocks: product.stocks}
           : product
       );
 
@@ -110,7 +110,7 @@ export default function Transaction({
             : item
         )
         .filter((item) => item.stocks > 0);
-  
+
       return updatedTransaction;
     });
     showRemoveSnackbar();
@@ -141,18 +141,60 @@ export default function Transaction({
       setIsCheckoutDisabled(false);
     };
     
-
+    
     const PlacetoOrder = () => {
-      const checkedID = checkeditem.map(((item) => item.id))
+      const checkedID = checkeditem.map((item) => item.id);
+      const updatedTransaction = transaction.filter(
+        (item) => !checkedID.includes(item.id)
+      );
+      setTransaction(updatedTransaction);
 
-      setOrderHistory ((prevOrderHistory) => [
+      let insufficientStocks = false;
+
+      const updatedProductList = productlist.map((product) => {
+        const checkedItem = checkeditem.find(
+          (checkedItem) => checkedItem.id === product.id
+        );
+        if (checkedItem) {
+          const quantityItems = checkedItem.stocks;
+          if (quantityItems > product.stocks) {
+            const quantityToAdd = checkedItem ? checkedItem.stocks : 0;
+            return {
+              ...product,
+              stocks: product.stocks - quantityToAdd,
+            };
+          } else {
+            insufficientStocks = true;
+            return product;
+            
+          }
+        }
+
+        // Return the original product if not found in checked items
+        return product;
+      });
+      
+      
+      if (insufficientStocks) {
+        Swal.fire({
+          title: "Error!",
+          text: "Insufficient stocks for some items!",
+          icon: "error",
+          timer: 2500,
+          width: 450,
+        });
+        return;
+      }
+
+      setProductList(updatedProductList);
+    
+      setOrderHistory((prevOrderHistory) => [
         ...prevOrderHistory,
         {
-          items: checkeditem
-        }
-      ])
-      const updatedTransaction = transaction.filter((item) => !checkedID.includes(item.id));
-      setTransaction(updatedTransaction);
+          items: checkeditem,
+        },
+      ]);
+    
       Swal.fire({
         title: "SUCCESS!",
         text: " Item's Ordered successfully!",
@@ -160,28 +202,37 @@ export default function Transaction({
         timer: 2500,
         width: 450,
       });
-      
-      setCheckedItem([]);
-     
-    }
-    console.log(checkeditem);
     
+      setCheckedItem([]);
+    };
+    
+    
+    
+    console.log(checkeditem);
 
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
+    const StyledTableCell = styled(TableCell)(({ theme }) => ({
+      [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+      },
+      [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+      },
   }));
-
+    
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
+      '&:nth-of-type(even)': {
+          backgroundColor: '#9daccc', // Set your desired transparent background color for even rows
+     
+      },
+
+      '&:nth-of-type(odd)': {
+        backgroundColor: '#c1c9db',
+      },
+      // hide last border
+      '&:last-child td, &:last-child th': {
+      //  border: "2px black",
+      },
   }));
   return (
     <>
@@ -191,7 +242,7 @@ export default function Transaction({
       <Box sx={{ display: "flex" }} />
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 2, backgroundColor: "white", marginTop: "10px" }}
+        sx={{ flexGrow: 1, p: 2, marginTop: "10px" }}
       >
         <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -265,13 +316,13 @@ export default function Transaction({
             <h1 style={{ marginTop: "-20px", textAlign: "left" }}>Buy</h1>
             <Box height={510} overflow="auto" sx={{ marginTop: "5px"}}>
                 <Grid container />
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} style={{ position: 'relative' }}>
                 <Table
                   sx={{ minWidth: 700 }}
                   aria-label="customized table"
                 >
-                    <TableHead>
-                        <TableRow>
+                    <TableHead> 
+                        <TableRow >
                             <StyledTableCell align="center">ID</StyledTableCell>
                             <StyledTableCell align="center">PRODUCT</StyledTableCell>
                             <StyledTableCell align="center">PRICE</StyledTableCell>
@@ -319,12 +370,12 @@ export default function Transaction({
                               <Button
                                 variant="contained"
                                 size="small"
-                                color="success"
-                                sx={{ p: 1, width: "40%" }}
+                                sx={{ p: 1, width: "40%", backgroundColor:"#394d7d", color:'white' }}
                                 type="submit"
                                 onClick={() => handleTransaction(product)}
+                               
                               >
-                                <ShoppingCartOutlinedIcon sx={{marginLeft: '-10px', marginRight: '2px' }}/>
+                                <ShoppingCartOutlinedIcon sx={{marginLeft: '-10px', marginRight: '2px',  }}/>
                                 Add to Cart
                               </Button>
 
@@ -439,7 +490,7 @@ export default function Transaction({
             </Box>
 
             {/* This code is for place to order part */}
-            <Box sx={{width: '40%', overflow: 'auto', marginTop: '-20px', backgroundColor: '#e0e0e0', marginLeft: '20px'}}>
+            <Box sx={{width: '40%', overflow: 'auto', marginTop: '-20px', backgroundColor: '#daeff2', marginLeft: '20px'}}>
             <h2 style={{textAlign: 'center', fontWeight: 'bold'}}>Your Items</h2>
             <Grid
               container
