@@ -2,7 +2,6 @@ import React, { useState, useEffect }  from "react";
 import Dashboard from "../components/dashboard";
 import Navbar from "../components/navbar";
 import { Box, Grid, TextField, Button, Stack, TableContainer, Table, TableHead, TableRow, TableBody, TableCell, styled, tableCellClasses, Paper, Modal, Snackbar, Alert} from '@mui/material';
-import { width } from "@mui/system";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -160,7 +159,7 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
       
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
         '&:nth-of-type(even)': {
-            backgroundColor: '#9daccc', // Set your desired transparent background color for even rows
+            backgroundColor: '#9daccc', 
        
         },
 

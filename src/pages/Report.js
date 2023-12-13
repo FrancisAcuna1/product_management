@@ -10,7 +10,7 @@ export default function Report({ orderHistory,}) {
     { field: 'product', headerName: 'Product Name', minWidth: 170, align: "center", flex: 1},
     { field: 'price', headerName: 'Price', minWidth: 170, align: "center", flex: 1 },
     { field: 'stocks', headerName: 'Quantity', minWidth: 170, align: "center", flex: 1},
-    { field: 'totalPrice', headerName: 'Total Price',type: "number", minWidth: 170, align: "center", flex: 1 },
+    { field: 'totalPrice', headerName: 'Total Price', type: 'number', minWidth: 170, align: "center", flex: 1 },
     { field: 'status', headerName: 'Status', minWidth: 170, align: "center", flex: 1,    sortable: false,
     renderCell: (params) => (
       <div style={{ color: 'green' }}>

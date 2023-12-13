@@ -57,25 +57,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 
-// const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-//   ({ theme, open }) => ({
-//     width: drawerWidth,
-//     flexShrink: 0,
-//     whiteSpace: 'nowrap',
-//     boxSizing: 'border-box',
-//     ...(open && {
-//       ...openedMixin(theme),
-//       '& .MuiDrawer-paper': openedMixin(theme),
-//     }),
-//     ...(!open && {
-//       ...closedMixin(theme),
-//       '& .MuiDrawer-paper': closedMixin(theme),
-//     }),
-//   }),
-// );
-
-// ... (your existing code)
-
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
       width: drawerWidth,
@@ -109,9 +90,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Dashboard() {
     const theme = useTheme();
-    // const [open, setOpen] = React.useState(false);
-    // const navbar = useNavigate();
-    // const updateOpen = UseApp ((state) => state.updateOpen);
     const open = UseApp ((state) => state.Nopen);
 
     // -------------INDAGDAG NA CODE PARA SA TABS--------------
@@ -127,8 +105,8 @@ export default function Dashboard() {
     const [countcateg, setCountCateg] = useState (1) //Count San ID sa Category
     const [transaction, setTransaction] = useState ([]); // List of Array
     const [checkeditem, setCheckedItem] = useState ([]) //list of array for check box to handle items to place to order
-    const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true);
-    const [orderHistory, setOrderHistory] = useState([]);
+    const [isCheckoutDisabled, setIsCheckoutDisabled] = useState(true); // useState to disabble button when item is not checked
+    const [orderHistory, setOrderHistory] = useState([]); //List of array for Report Transaction
 
 
     // -------------CLOSING--------------

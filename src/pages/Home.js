@@ -6,8 +6,6 @@ import LocalMallSharpIcon from '@mui/icons-material/LocalMallSharp';
 import BallotSharpIcon from '@mui/icons-material/BallotSharp';
 import PaidSharpIcon from '@mui/icons-material/PaidSharp';
 import TimelineSharpIcon from '@mui/icons-material/TimelineSharp';
-import { BarChart} from '@mui/x-charts';
-import { LineChart } from '@mui/x-charts/LineChart';
 import Chart from 'react-apexcharts';
 
 
@@ -119,7 +117,6 @@ export default function Home({ categ, productlist, orderHistory }) {
                 },
               },
             },
-            // Add more objects for additional lines as needed
           ],
         }
     }
@@ -130,7 +127,6 @@ export default function Home({ categ, productlist, orderHistory }) {
     data: productlist
       .filter(p => p.category === category)
       .map(p => p.stocks),
-    // area: true,
   label:  `${category}`,
   }));
 
@@ -275,14 +271,6 @@ export default function Home({ categ, productlist, orderHistory }) {
             <Grid item xs={12} sm={6}>
             <Card height={450} MaxWidth={500}  overflow="auto"   sx={{  marginTop: '20px',  justifyContent: "center", alignItems: "center", }}>
                 {
-                    //   <BarChart
-                  //   xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C',] }]}
-                  //   series={[{ data: [4, 3, 5, ] }, { data: [1, 6, 3, ] }, { data: [2, 5, 6] }, { data: [2, 2, 6] }, ]}
-                  //   MaxWidth={900}
-                  //   height={474}
-                  //   overflow="auto"  
-                  //   sx={{color: 'white'}}
-                  // />
                   <Chart
                     options={optionsBar}
                     series={seriesBar}
@@ -297,13 +285,6 @@ export default function Home({ categ, productlist, orderHistory }) {
             <Grid item xs={12} sm={6}>
             <Card height={450} maxWidth={100} overflow="auto"  sx={{  marginTop: '20px',  justifyContent: "center", alignItems: "center", marginRight: "30px" }}>
               {hasStocks ? (
-              //    <LineChart
-              //    options={options}
-              //    series={series}
-              //    MaxWidth={620}
-              //    height={474}
-                 
-              //  />
                <Chart
                 options={options}
                 series={series}

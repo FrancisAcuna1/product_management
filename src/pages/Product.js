@@ -188,7 +188,7 @@ export default function Product({categ, productlist, setProductList, count, setC
       
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
         '&:nth-of-type(even)': {
-            backgroundColor: '#9daccc', // Set your desired transparent background color for even rows
+            backgroundColor: '#9daccc',
        
         },
 
