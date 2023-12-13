@@ -16,68 +16,56 @@ import Chart from 'react-apexcharts';
 
 export default function Home({ categ, productlist, orderHistory }) {
   const totalProducts = productlist;
-  const [totalIncome, setTotalIncome] = useState(0);
-  const CalculateIncome = () =>{
-    const Total = orderHistory.reduce((acc, order) =>{
-      return acc + orderHistory.reduce((index, item) =>{
-        return index + item.stocks * item.price;
-      }, 0);
+
+  const TotalSales = orderHistory.reduce((totalPrice, sale) => {
+    const sales = sale.items.reduce((totalSales, item) => {
+      const total = (parseInt(item.price )* parseInt(item.stocks ) || 0); 
+      return totalSales + total
     }, 0);
-    setTotalIncome(Total);
-    console.log("Total income updated:", Total);
-  }
+    return totalPrice + sales;
+  }, 0)
+
+
+  const products = [...new Set(orderHistory.flatMap(sale => sale.items.map(item => item.product)))];
+  const optionsBar = {
+    chart: {
+      id: 'basic-bar',
+      height: 350,
+    },
+    colors: ['#008FFB'],
+    plotOptions: {
+      bar: {
+        borderRadius: 5,
+        horizontal: true,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left',
+    },
+    xaxis: {
+      categories: products,
+    },
+    yaxis: {
+      title: {
+        text: 'Number of Items Sold',
+      },
+    },
+  };
+  const seriesBar = [{
+    name: 'Sales',
+    data: products.map(product => {
+      return orderHistory
+        .flatMap(sale => sale.items)
+        .filter(item => item.product === product) 
+        .reduce((toalPrice, items) => toalPrice + (items.stocks * items.price || 0), 0)
+    }),
+  }];
   
-
-   React.useEffect(()=>{
-    CalculateIncome();
-   }, [orderHistory]);
-  
-  
-  // const DataStocks = productlist.map((item) => ({
-  //   timestamp: item.id,
-  //   stocks: item.stocks
-  // }))
-  // console.log(DataStocks);
-  // const data = {
-  //   labels: productlist.map(o => o.name),
-  //   datasets: [
-  //     {
-  //       label: 'Products',
-  //       backgroundColor: 'rgba(0, 255, 0, 0.2)',
-  //       borderColor: 'rgb(0, 255, 0)',
-  //       borderWidth: 1,
-  //       data: productlist.map(o => o.stock)
-  //     }
-  //   ]
-  // };
-  // const options = {
-  //   plugins: {
-  //   title: {
-  //   display: true,
-  //   text: 'Bar Chart'
-  //   }
-  // }
-  // }
-
-  // const barChartData = {
-  //   xAxis: { dataKey: 'name', type: 'category' },
-  //   yAxis: {},
-  //   series: [{ dataKey: 'stock', fill: '#8884d8', name: 'Products' }],
-  // };
-
-  // const product = productlist.map(p => p.product);
-  // const series = [
-  //   {
-  //     name: 'Stocks',
-  //     data: productlist.map(p => p.stocks)
-  //   }
-  // ];
-
-  // THIS CODE IS FOR LINECHART
-
-
   const uniqueCategories = [...new Set(productlist.map(p => p.category))];
-
   const hasStocks = uniqueCategories.some(category => {
     const stocksData = productlist.filter(p => p.category === category).map(p => p.stocks);
     return stocksData.some(stock => stock > 0);
@@ -87,9 +75,26 @@ export default function Home({ categ, productlist, orderHistory }) {
     chart: {
       id: "basic-bar"
     },
+    stroke: {
+      curve: 'smooth',
+    },
     animate: {
       duration: 1000, // Animation duration in milliseconds
       easing: 'easeInOut', // Easing function for the animation
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left'
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        opacityFrom: 0.5,
+        opacityTo: 0.6,
+      }
+    },
+    dataLabels: {
+      enabled: false
     },
     annotations: {
       annotations: {
@@ -121,6 +126,7 @@ export default function Home({ categ, productlist, orderHistory }) {
   };
   const series = uniqueCategories.map(category => ({
     name: category,
+    type: 'area',
     data: productlist
       .filter(p => p.category === category)
       .map(p => p.stocks),
@@ -205,7 +211,7 @@ export default function Home({ categ, productlist, orderHistory }) {
                   <CardContent>
                     <Typography gutterBottom variant="h5" ccomponent="div" sx={{color: 'white', marginLeft: 2 }}>
                           {/* {category.categories} */}
-                          Income
+                          Transaction
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -222,7 +228,7 @@ export default function Home({ categ, productlist, orderHistory }) {
                           <PaidSharpIcon sx={{color: '#9c27b0', fontSize: 30, display: 'flex', alignItems: 'center', justifyContent: 'center',  marginRight: '8px' }}/>
                           <Typography variant="body2" color="text.secondary" sx={{ fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '5px',}}>
                               {/* Total Products: {categoryProducts.length} */}
-                              Total Income: ${totalIncome.toFixed(2)}
+                              Total Transaction: {orderHistory.length}
                           
                           </Typography>
                       </ListItemIcon> 
@@ -255,8 +261,7 @@ export default function Home({ categ, productlist, orderHistory }) {
                           <TimelineSharpIcon sx={{color: '#4a148c', fontSize: 30, display: 'flex', alignItems: 'center', justifyContent: 'center',  marginRight: '8px' }}/>
                           <Typography variant="body2" color="text.secondary" sx={{ fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '5px',}}>
                               {/* Total Products: {categoryProducts.length} */}
-                              Total Sales: 
-                          
+                              Total Sales: ₱{TotalSales.toFixed(2)}
                           </Typography>
                       </ListItemIcon> 
                     </CardContent>
@@ -269,14 +274,23 @@ export default function Home({ categ, productlist, orderHistory }) {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
             <Card height={450} MaxWidth={500}  overflow="auto"   sx={{  marginTop: '20px',  justifyContent: "center", alignItems: "center", }}>
-                <BarChart
-                      xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C',] }]}
-                      series={[{ data: [4, 3, 5, ] }, { data: [1, 6, 3, ] }, { data: [2, 5, 6] }, { data: [2, 2, 6] }, ]}
-                      MaxWidth={900}
-                      height={474}
-                      overflow="auto"  
-                      sx={{color: 'white'}}
-                    />
+                {
+                    //   <BarChart
+                  //   xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C',] }]}
+                  //   series={[{ data: [4, 3, 5, ] }, { data: [1, 6, 3, ] }, { data: [2, 5, 6] }, { data: [2, 2, 6] }, ]}
+                  //   MaxWidth={900}
+                  //   height={474}
+                  //   overflow="auto"  
+                  //   sx={{color: 'white'}}
+                  // />
+                  <Chart
+                    options={optionsBar}
+                    series={seriesBar}
+                    type="bar"
+                    MaxWidth={620}
+                    height={462}
+                  />
+                } 
               </Card>
             </Grid>
 
@@ -288,6 +302,7 @@ export default function Home({ categ, productlist, orderHistory }) {
               //    series={series}
               //    MaxWidth={620}
               //    height={474}
+                 
               //  />
                <Chart
                 options={options}

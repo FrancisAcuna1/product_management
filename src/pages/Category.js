@@ -7,6 +7,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { SnackbarProvider, useSnackbar,} from 'notistack';
+import Swal from 'sweetalert2'
 
 
 
@@ -67,8 +68,14 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
             alert("Enter Category Value!");
         }
         else if (isCategoryAdded(newcateg.categories)){
-            alert(`'${newcateg.categories}' Is Already Added!`)
-            setNewCateg({
+            Swal.fire({
+                title: "Error!",
+                text: `'${newcateg.categories}' is already Added. Please check and try again.`,
+                icon: "error",
+                timer: 2500,
+                width: 400,
+              });
+              setNewCateg({
                 id: '',
                 categories: '',
             });

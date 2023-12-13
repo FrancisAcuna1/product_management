@@ -28,7 +28,7 @@ export default function Report({ orderHistory,}) {
       product: item.product,
       price: item.price,
       stocks: item.stocks,
-      totalPrice: `${item.price * item.stocks}`,
+      totalPrice: `₱${(item.price * item.stocks).toFixed(2)}`,
       status: 'Completed',
     }));
 

@@ -38,8 +38,8 @@ export default function Transaction({
     };
   const showSuccessSnackbar = () => {
     setSuccessSnackbarOpen(true);
-  };
-
+    // You can customize the message based on the variant
+  }
   const handleCloseRemoveSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
     return;
@@ -97,7 +97,7 @@ export default function Transaction({
       if (removedItem) {
         const updatedProductList = productlist.map((product) =>
           product.id === productId
-            ? { ...product, stocks: parseInt(product.stocks) + 1 }
+            ? { ...product, stocks: parseInt(product.stocks)}
             : product
         );
         setProductList(updatedProductList);
@@ -144,50 +144,48 @@ export default function Transaction({
     
     const PlacetoOrder = () => {
       const checkedID = checkeditem.map((item) => item.id);
+      const insufficientStocksItems = [];
+    
+
       const updatedTransaction = transaction.filter(
         (item) => !checkedID.includes(item.id)
       );
-      setTransaction(updatedTransaction);
-
-      let insufficientStocks = false;
-
+    
       const updatedProductList = productlist.map((product) => {
         const checkedItem = checkeditem.find(
           (checkedItem) => checkedItem.id === product.id
         );
+    
         if (checkedItem) {
-          const quantityItems = checkedItem.stocks;
-          if (quantityItems > product.stocks) {
-            const quantityToAdd = checkedItem ? checkedItem.stocks : 0;
-            return {
-              ...product,
-              stocks: product.stocks - quantityToAdd,
-            };
-          } else {
-            insufficientStocks = true;
+          const prodtStocks = product.stocks;
+          const quantityToAdd = checkedItem ? checkedItem.stocks : 0;
+    
+          if (quantityToAdd > prodtStocks) {
+            insufficientStocksItems.push(checkedItem);
             return product;
-            
           }
+    
+          return {
+            ...product,
+            stocks: product.stocks - quantityToAdd,
+          };
         }
-
-        // Return the original product if not found in checked items
+    
         return product;
       });
-      
-      
-      if (insufficientStocks) {
+    
+      if (insufficientStocksItems.length > 0) {
         Swal.fire({
-          title: "Error!",
-          text: "Insufficient stocks for some items!",
-          icon: "error",
+          title: 'Error!',
+          text: 'Quantity exceeds available stocks for some items!',
+          icon: 'error',
           timer: 2500,
           width: 450,
         });
         return;
       }
-
-      setProductList(updatedProductList);
     
+      setProductList(updatedProductList);
       setOrderHistory((prevOrderHistory) => [
         ...prevOrderHistory,
         {
@@ -195,16 +193,81 @@ export default function Transaction({
         },
       ]);
     
+      setTransaction(updatedTransaction);
+    
       Swal.fire({
-        title: "SUCCESS!",
+        title: 'SUCCESS!',
         text: " Item's Ordered successfully!",
-        icon: "success",
+        icon: 'success',
         timer: 2500,
         width: 450,
       });
     
       setCheckedItem([]);
     };
+    // const PlacetoOrder = () => {
+    //   const checkedID = checkeditem.map((item) => item.id);
+    //   const updatedTransaction = transaction.filter(
+    //     (item) => !checkedID.includes(item.id)
+    //   );
+    //   setTransaction(updatedTransaction);
+
+    //   let insufficientStocks = false;
+
+    //   const updatedProductList = productlist.map((product) => {
+    //     const checkedItem = checkeditem.find(
+    //       (checkedItem) => checkedItem.id === product.id
+    //     );
+    //     if (checkedItem) {
+    //       const quantityItems = checkedItem.stocks;
+    //       if (quantityItems > product.stocks) {
+    //         const quantityToAdd = checkedItem ? checkedItem.stocks : 0;
+    //         return {
+    //           ...product,
+    //           stocks: product.stocks - quantityToAdd,
+    //         };
+    //       } else {
+    //         insufficientStocks = true;
+    //         return product;
+            
+    //       }
+    //     }
+
+    //     // Return the original product if not found in checked items
+    //     return product;
+    //   });
+      
+      
+    //   if (insufficientStocks) {
+    //     Swal.fire({
+    //       title: "Error!",
+    //       text: "Insufficient stocks for some items!",
+    //       icon: "error",
+    //       timer: 2500,
+    //       width: 450,
+    //     });
+    //     return;
+    //   }
+
+    //   setProductList(updatedProductList);
+    
+    //   setOrderHistory((prevOrderHistory) => [
+    //     ...prevOrderHistory,
+    //     {
+    //       items: checkeditem,
+    //     },
+    //   ]);
+    
+    //   Swal.fire({
+    //     title: "SUCCESS!",
+    //     text: " Item's Ordered successfully!",
+    //     icon: "success",
+    //     timer: 2500,
+    //     width: 450,
+    //   });
+    
+    //   setCheckedItem([]);
+    // };
     
     
     
