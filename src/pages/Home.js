@@ -276,21 +276,21 @@ export default function Home({ categ, productlist, orderHistory }) {
                     series={seriesBar}
                     type="bar"
                     MaxWidth={620}
-                    height={462}
+                    height={410}
                   />
                 } 
               </Card>
             </Grid>
 
             <Grid item xs={12} sm={6}>
-            <Card height={450} maxWidth={100} overflow="auto"  sx={{  marginTop: '20px',  justifyContent: "center", alignItems: "center", marginRight: "30px" }}>
+            <Card height={400} maxWidth={100} overflow="auto"  sx={{  marginTop: '20px',  justifyContent: "center", alignItems: "center", marginRight: "30px" }}>
               {hasStocks ? (
                <Chart
                 options={options}
                 series={series}
                 type="line"
                 MaxWidth={620}
-                height={462}
+                height={410}
               />
               ):(
                 <Typography variant="body2" color="text.secondary"  sx={{height: '470px', fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '5px', }}>

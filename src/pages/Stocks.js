@@ -39,6 +39,16 @@ export default function Stocks({productlist, setProductList,  categ, setCateg}){
     };
 
     const handleUpdateProduct = () => {
+        if(editProductValue.price < 0 || editProductValue.stocks < 0) {
+            alert('Invalid Input, please input greaterthan to 0')
+            return;
+        }
+        const isPriceValid = !isNaN(parseFloat(editProductValue.price));
+        const isStocksValid = !isNaN(parseInt(editProductValue.stocks));
+        if (!isPriceValid || !isStocksValid) {;
+            alert('Invalid Input, please input numbers')
+            return;
+        }
         const updatedProduct = productlist.map((product) =>
         product === selectedProduct
             ? { ...product, 
@@ -171,6 +181,7 @@ export default function Stocks({productlist, setProductList,  categ, setCateg}){
                                 <TextField
                                     disabled
                                     label="Price"
+                                    type="number"
                                     variant="outlined"
                                     fullWidth
                                     sx={{marginBottom: 1}}
@@ -178,8 +189,10 @@ export default function Stocks({productlist, setProductList,  categ, setCateg}){
                                     onChange={(e) => setEditProductValue({...editProductValue, price: e.target.value})}
                                 />
                                 <TextField
+
                                     label="Stocks"
                                     variant="outlined"
+                                    type="number"
                                     fullWidth
                                     sx={{marginBottom: 1}}
                                     value={editProductValue.stocks}

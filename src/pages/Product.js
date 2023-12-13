@@ -145,14 +145,24 @@ export default function Product({categ, productlist, setProductList, count, setC
         setEditProductValue({
             id: product.id,
             product: product.product,
-            price: product.price,
-            stocks: product.stocks,
+            price: parseInt(product.price),
+            stocks: parseInt(product.stocks),
             category: product.category
             
         });
     };
 
     const handleUpdateProduct = () => {
+        if(editProductValue.price < 0 || editProductValue.stocks < 0) {
+            alert('Invalid Input, please input greaterthan to 0')
+            return;
+        }
+        const isPriceValid = !isNaN(parseFloat(editProductValue.price));
+        const isStocksValid = !isNaN(parseInt(editProductValue.stocks));
+        if (!isPriceValid || !isStocksValid) {;
+            alert('Invalid Input, please input numbers')
+            return;
+        }
         const updatedProduct = productlist.map((product) =>
         product === selectedProduct
             ? { ...product, 
@@ -375,7 +385,9 @@ export default function Product({categ, productlist, setProductList, count, setC
                             onChange={(e) => setEditProductValue({...editProductValue, id: e.target.value})}
                         />
                          <TextField
+                            required
                             label="Product"
+                            type="text"
                             variant="outlined"
                             fullWidth
                             sx={{marginBottom: 1}}
@@ -383,16 +395,20 @@ export default function Product({categ, productlist, setProductList, count, setC
                             onChange={(e) => setEditProductValue({...editProductValue, product: e.target.value})}
                         />
                          <TextField
+                            required   
                             label="Price"
                             variant="outlined"
+                            type="number"
                             fullWidth
                             sx={{marginBottom: 1}}
                             value={editProductValue.price}
                             onChange={(e) => setEditProductValue({...editProductValue, price: e.target.value})}
                         />
                          <TextField
+                            required
                             label="Stocks"
                             variant="outlined"
+                            type="number"
                             fullWidth
                             sx={{marginBottom: 1}}
                             value={editProductValue.stocks}
