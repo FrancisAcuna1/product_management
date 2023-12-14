@@ -113,13 +113,38 @@ export default function Transaction({
     });
     showRemoveSnackbar();
   };
+  useEffect(() => {
+    // Update the transaction when the product list changes
+    const updatedTransaction = transaction.map((cartItem) => {
+      const updatedProduct = productlist.find(
+        (product) => product.id === cartItem.id
+      );
+
+      if (updatedProduct) {
+        return {
+          ...cartItem,
+          stocks: Math.min(cartItem.stocks, updatedProduct.stocks),
+          price: updatedProduct.price,
+        };
+      }
+
+      return cartItem;
+    }).filter((cartItem) => productlist.find((product) => product.id === cartItem.id));
+
+    setTransaction(updatedTransaction);
+
+    // Create an array of checked items
+    const checkedItems = updatedTransaction.filter((item) => item.checked);
+    // Update the checked items state
+    setCheckedItem(checkedItems);
+  }, [productlist]);
   
-    useEffect(() => {
-      // Create an array of checked items
-      const checkedItems = transaction.filter((item) => item.checked);
-      // Update the checked items state
-      setCheckedItem(checkedItems);
-    }, [transaction]);
+    // useEffect(() => {
+    //   // Create an array of checked items
+    //   const checkedItems = transaction.filter((item) => item.checked);
+    //   // Update the checked items state
+    //   setCheckedItem(checkedItems);
+    // }, [transaction]);
   
     const handleCheckboxChange = (itemId) => {
       setTransaction((prevTransaction) => {
