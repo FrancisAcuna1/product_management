@@ -11,7 +11,8 @@ import StorefrontSharpIcon from '@mui/icons-material/StorefrontSharp';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { SnackbarProvider, useSnackbar,} from 'notistack';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import toast from "react-hot-toast";
 
 export default function Transaction({
   productlist,
@@ -28,6 +29,7 @@ export default function Transaction({
   const [value, setValue] = React.useState("1");
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
   const [removeSnackbarOpen, setRemoveSnackbarOpen] = useState(false);
+  const [msgSnackbarOpen, setMsgSnackbarOpen] = useState(false);
 
   const handleCloseSuccessSnackbar = (event, reason) => {
     if (reason === 'clickaway') {
@@ -54,6 +56,21 @@ export default function Transaction({
   };
 
   const handleTransaction = (item) => {
+    const existingCartItem = transaction.find(
+      (cartItem) => cartItem.id === item.id
+    );
+
+    if (existingCartItem && existingCartItem.stocks >= item.stocks) {
+      Swal.fire({
+        title: 'Warning!',
+        text: 'Quantity exceeds available stocks for some items!',
+        icon: 'error',
+        timer: 2500,
+        width: 450,
+      });
+      return;
+    }
+
     if (item.stocks > 0) {
       const updatedProductList = productlist.map((product) =>
         product.id === item.id
@@ -63,9 +80,6 @@ export default function Transaction({
 
       setProductList(updatedProductList);
 
-      const existingCartItem = transaction.find(
-        (cartItem) => cartItem.id === item.id
-      );
 
       if (existingCartItem) {
         const updatedTransaction = transaction.map((cartItem) =>
@@ -85,8 +99,9 @@ export default function Transaction({
           },
         ]);
       }
+      showSuccessSnackbar()
     }
-    showSuccessSnackbar()
+
   };
 
   const handleRemoveItem = (productId) => {
@@ -113,6 +128,8 @@ export default function Transaction({
     });
     showRemoveSnackbar();
   };
+
+  // UseEffect for updating the cart item when the product value is change
   useEffect(() => {
     // Update the transaction when the product list changes
     const updatedTransaction = transaction.map((cartItem) => {
@@ -127,10 +144,8 @@ export default function Transaction({
           price: updatedProduct.price,
         };
       }
-
       return cartItem;
     }).filter((cartItem) => productlist.find((product) => product.id === cartItem.id));
-
     setTransaction(updatedTransaction);
 
     // Create an array of checked items
@@ -138,107 +153,106 @@ export default function Transaction({
     // Update the checked items state
     setCheckedItem(checkedItems);
   }, [productlist]);
-  
-    // useEffect(() => {
-    //   // Create an array of checked items
-    //   const checkedItems = transaction.filter((item) => item.checked);
-    //   // Update the checked items state
-    //   setCheckedItem(checkedItems);
-    // }, [transaction]);
-  
-    const handleCheckboxChange = (itemId) => {
-      setTransaction((prevTransaction) => {
-        const updatedTransaction = prevTransaction.map((item) =>
-          item.id === itemId ? { ...item, checked: !item.checked } : item
-        );
-        return updatedTransaction;
-      });
-      
-      const checkedItemToAdd = transaction.find((item) => item.id === itemId);
-      setCheckedItem((prevCheckedItems) =>
-        checkedItemToAdd && checkedItemToAdd.checked
-        ? [...prevCheckedItems, checkedItemToAdd]
-        : prevCheckedItems.filter((item) => item.id !== itemId)
-      );
-    
-      setIsCheckoutDisabled(false);
-    };
-    
-    
-    const PlacetoOrder = () => {
-      const checkedID = checkeditem.map((item) => item.id);
-      const insufficientStocksItems = [];
-    
 
-      const updatedTransaction = transaction.filter(
-        (item) => !checkedID.includes(item.id)
+  useEffect(() => {
+    // Create an array of checked items
+    const checkedItems = transaction.filter((item) => item.checked);
+    // Update the checked items state
+    setCheckedItem(checkedItems);
+  }, [transaction]);
+  
+  const handleCheckboxChange = (itemId) => {
+    setTransaction((prevTransaction) => {
+      const updatedTransaction = prevTransaction.map((item) =>
+        item.id === itemId ? { ...item, checked: !item.checked } : item
       );
+      return updatedTransaction;
+    });
+      
+    const checkedItemToAdd = transaction.find((item) => item.id === itemId);
+    setCheckedItem((prevCheckedItems) =>
+      checkedItemToAdd && checkedItemToAdd.checked
+      ? [...prevCheckedItems, checkedItemToAdd]
+      : prevCheckedItems.filter((item) => item.id !== itemId)
+    );
+  
+    setIsCheckoutDisabled(false);
+  };
     
-      const updatedProductList = productlist.map((product) => {
-        const checkedItem = checkeditem.find(
-          (checkedItem) => checkedItem.id === product.id
-        );
     
-        if (checkedItem) {
-          const prodtStocks = product.stocks;
-          const quantityToAdd = checkedItem ? checkedItem.stocks : 0;
+  const PlacetoOrder = () => {
+    const checkedID = checkeditem.map((item) => item.id);
+    const insufficientStocksItems = [];
+
+    const updatedTransaction = transaction.filter(
+      (item) => !checkedID.includes(item.id)
+    );
     
-          if (quantityToAdd > prodtStocks) {
-            insufficientStocksItems.push(checkedItem);
-            return product;
-          }
-    
-          return {
-            ...product,
-            stocks: product.stocks - quantityToAdd,
-          };
+    const updatedProductList = productlist.map((product) => {
+      const checkedItem = checkeditem.find(
+        (checkedItem) => checkedItem.id === product.id
+      );
+  
+      if (checkedItem) {
+        const prodtStocks = product.stocks;
+        const quantityToAdd = checkedItem ? checkedItem.stocks : 0;
+  
+        if (quantityToAdd > prodtStocks) {
+          insufficientStocksItems.push(checkedItem);
+          return product;
         }
     
-        return product;
-      });
-    
-      if (insufficientStocksItems.length > 0) {
-        Swal.fire({
-          title: 'Error!',
-          text: 'Quantity exceeds available stocks for some items!',
-          icon: 'error',
-          timer: 2500,
-          width: 450,
-        });
-        return;
+        return {
+          ...product,
+          stocks: product.stocks - quantityToAdd,
+        };
       }
     
-      setProductList(updatedProductList);
-      setOrderHistory((prevOrderHistory) => [
-        ...prevOrderHistory,
-        {
-          items: checkeditem,
-        },
-      ]);
+      return product;
+    });
     
-      setTransaction(updatedTransaction);
-    
+    if (insufficientStocksItems.length > 0) {
       Swal.fire({
-        title: 'SUCCESS!',
-        text: " Item's Ordered successfully!",
-        icon: 'success',
+        title: 'Error!',
+        text: 'Quantity exceeds available stocks for some items!',
+        icon: 'error',
         timer: 2500,
         width: 450,
       });
+      return;
+    }
     
-      setCheckedItem([]);
-    };
+    setProductList(updatedProductList);
+    setOrderHistory((prevOrderHistory) => [
+      ...prevOrderHistory,
+      {
+        items: checkeditem,
+      },
+    ]);
+    
+    setTransaction(updatedTransaction);
+    
+    Swal.fire({
+      title: 'SUCCESS!',
+      text: " Item's Ordered successfully!",
+      icon: 'success',
+      timer: 2500,
+      width: 450,
+    });
+    
+    setCheckedItem([]);
+  };
   
-    console.log(checkeditem);
+  console.log(checkeditem);
 
-    const StyledTableCell = styled(TableCell)(({ theme }) => ({
-      [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-      },
-      [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-      },
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
   }));
     
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -263,7 +277,7 @@ export default function Transaction({
       <Box sx={{ display: "flex" }} />
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 2, marginTop: "10px" }}
+        sx={{ flexGrow: 1, p: 2, marginTop: "10px", minHeight: '100%', }}
       >
         <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -638,6 +652,8 @@ export default function Transaction({
             Item is Removed to cart successfully!
           </Alert> 
         </Snackbar>
+
+    
       </Box>
       </SnackbarProvider>
     </>

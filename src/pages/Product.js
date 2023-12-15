@@ -9,6 +9,7 @@ import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutl
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { SnackbarProvider, useSnackbar,} from 'notistack';
 import Swal from 'sweetalert2'
+import toast from "react-hot-toast";
 
 
 
@@ -51,9 +52,6 @@ export default function Product({categ, productlist, setProductList, count, setC
         setUpdateSnackbarOpen(true);
     };
 
-
-  
-
     const [formdata, setFormData] = useState({
         id: '', 
         product: '',
@@ -62,9 +60,13 @@ export default function Product({categ, productlist, setProductList, count, setC
         category: '',
     }); // object array
 
-    const isProductAdded = (products) => {
-        return productlist.some((p) => p.product === products);
+    const isProductAdded = (productName) => {
+        // Case-insensitive check for duplicate product names
+        const lowerCaseProductName = productName.toLowerCase();
+        return productlist.some((product) => product.product.toLowerCase() === lowerCaseProductName);
     };
+
+    
 
     const handleSubmit = (event) => {
         event.preventDefault(); //in prevent sini na function na mag reload ang page 
@@ -81,7 +83,7 @@ export default function Product({categ, productlist, setProductList, count, setC
               });
               return; // Stop further execution
         }
-        else if(formdata.price < 0 || formdata.stocks < 0) {
+        else if(formdata.price <= 0 || formdata.stocks < 0) {
             // Handle the case where a negative price is found
             Swal.fire({
               title: "Error!",
@@ -95,7 +97,7 @@ export default function Product({categ, productlist, setProductList, count, setC
         else{
             const newprod = ({
                 id: count,
-                product: formdata.product,  
+                product: formdata.product, 
                 price: formdata.price,
                 stocks: formdata.stocks,
                 category: formdata.category,
@@ -121,7 +123,6 @@ export default function Product({categ, productlist, setProductList, count, setC
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-    
         // Update the corresponding field in the form data
         setFormData({
           ...formdata,
@@ -129,13 +130,19 @@ export default function Product({categ, productlist, setProductList, count, setC
         });
       };
 
+    // const DeleteProduct = (product) => {
+    //     const delprodList = [...productlist];
+    //     delprodList.splice(product, 1);
+    //     setProductList(delprodList);
+    //     setFormData(delprodList);
+    //     DeleteSnackbar();
+    // }
     const DeleteProduct = (product) => {
-        const delprodList = [...productlist];
-        delprodList.splice(product, 1);
-        setProductList(delprodList);
-        setFormData(delprodList);
+        const deleteProductList = productlist.filter((p) => p.id !== product.id);
+        setProductList(deleteProductList);
         DeleteSnackbar();
     }
+    
 
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [editProductValue, setEditProductValue] = useState("");
@@ -153,7 +160,7 @@ export default function Product({categ, productlist, setProductList, count, setC
     };
 
     const handleUpdateProduct = () => {
-        if(editProductValue.price < 0 || editProductValue.stocks < 0) {
+        if(editProductValue.price <= 0 || editProductValue.stocks < 0) {
             alert('Invalid Input, please input greaterthan to 0')
             return;
         }
@@ -162,7 +169,22 @@ export default function Product({categ, productlist, setProductList, count, setC
         if (!isPriceValid || !isStocksValid) {;
             alert('Invalid Input, please input numbers')
             return;
+        } 
+
+        const isProductNameChanged = selectedProduct.product !== editProductValue.product;
+        if (isProductNameChanged) {
+            const isIdAlreadyPresent = productlist.some(
+                (product) => product.product.toLowerCase() === editProductValue.product.toLowerCase()
+            );
+
+            if (isIdAlreadyPresent) {
+                alert(
+                    `Product ${editProductValue.product} is already added, please try a different product name`
+                );
+                return;
+            }
         }
+
         const updatedProduct = productlist.map((product) =>
         product === selectedProduct
             ? { ...product, 
@@ -175,15 +197,18 @@ export default function Product({categ, productlist, setProductList, count, setC
             : product
         );
 
-        setProductList(updatedProduct);
-        handleCloseModal(); // Close the modal after updating
-        UpdateSnackbar();
+            setProductList(updatedProduct);
+            handleCloseModal(); // Close the modal after updating
+            UpdateSnackbar();
     };
 
     const handleCloseModal = () => {
         setSelectedProduct(null);
         setEditProductValue("");
     };
+    const CancelModal = () => {
+        handleCloseModal()
+    }
           
     
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -216,7 +241,7 @@ export default function Product({categ, productlist, setProductList, count, setC
             <Navbar/>
             <SnackbarProvider maxSnack={1}>
             <Box sx={{ display: 'flex',  justifyContent: 'center', }}>
-                <Box component="main" sx={{ flexGrow: 1, p: 2, }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 2,  minHeight: '100%'}}>
                 <form
                     style={{
                         display: 'flex',
@@ -356,7 +381,6 @@ export default function Product({categ, productlist, setProductList, count, setC
 
                     <Modal
                         open={Boolean(selectedProduct)}
-                        onClose={handleCloseModal}
                         aria-labelledby="modal-title"
                         aria-describedby="modal-description"
                     >
@@ -432,6 +456,9 @@ export default function Product({categ, productlist, setProductList, count, setC
                         <br/>
                         <Button variant="contained" color="primary" sx={{marginTop: 1, marginBottom: 1,}} onClick={handleUpdateProduct}>
                             Update
+                        </Button>
+                        <Button variant="contained"  sx={{backgroundColor: '#9e9e9e', marginLeft: '10px'}} onClick={CancelModal}>
+                            Cancel
                         </Button>
                         </div>
                     </Modal>

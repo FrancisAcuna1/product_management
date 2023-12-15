@@ -100,7 +100,7 @@ export default function Stocks({productlist, setProductList,  categ, setCateg}){
         <>  
             <Navbar/>
             <SnackbarProvider maxSnack={1}>
-                <Box sx={{ display: 'flex',  justifyContent: 'center', }}>
+                <Box sx={{ display: 'flex',  justifyContent: 'center', minHeight: '100%', }}>
                     <Box component="main" sx={{ flexGrow: 1, p: 2,}}>
                         <Box height={530} overflow="auto">
                             <Grid container />

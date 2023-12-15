@@ -42,7 +42,7 @@ export default function Report({ orderHistory,}) {
       <Box sx={{ display: 'flex' }}>
         <Box
             component="main" 
-            sx={{ flexGrow: 1, p: 2, height: "75vh",}}
+            sx={{ flexGrow: 1, p: 2, minHeight: '100%',}}
           >
             <DataGrid
               height={600}

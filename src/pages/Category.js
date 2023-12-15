@@ -58,7 +58,8 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
     });
 
     const isCategoryAdded = (category) => {
-        return categ.some((c) => c.categories === category);
+        const toLowerCaseValue = category.toLowerCase();
+        return categ.some((c) => c.categories.toLowerCase() === toLowerCaseValue);
     };
 
     const handleSubmitCateg = (event) => {
@@ -127,6 +128,14 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
     };
 
     const handleUpdateCategory = () => {
+
+        if (isCategoryAdded(editCategoryValue)) {
+            alert(
+                `'${editCategoryValue}'  is already Added. Please check and try again.`,
+            );
+            return;
+        }
+
         const updatedCategories = categ.map((category) =>
         category === selectedCategory
             ? { ...category, categories: editCategoryValue }
@@ -142,6 +151,10 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
         setSelectedCategory(null);
         setEditCategoryValue("");
     };
+
+    const CancelModal = () => {
+        handleCloseModal()
+    }
     // Closing Code
 
 
@@ -178,9 +191,9 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
         <>  
             <Navbar/>
             <SnackbarProvider maxSnack={1}>
-            <Box sx={{ display: 'flex', justifyContent: "center",}}>
+            <Box sx={{ display: 'flex', justifyContent: "center",  }}>
                 {/* <Dashboard/> */}
-                <Box component="main" sx={{ flexGrow: 1, p: 2, marginTop:"-20px" }}>
+                <Box component="main" sx={{ flexGrow: 1, p: 2, marginTop:"-20px", minHeight: '100%' }}>
                     <form
                         style={{
                             display: 'flex',
@@ -266,7 +279,6 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
                     </Box>
                     <Modal
                         open={Boolean(selectedCategory)}
-                        onClose={handleCloseModal}
                         aria-labelledby="modal-title"
                         aria-describedby="modal-description"
                     >
@@ -291,6 +303,9 @@ export default function Category({ setCateg, categ, countcateg, setCountCateg}){
                         />
                         <Button variant="contained" color="primary" sx={{marginTop: 2}} onClick={handleUpdateCategory}>
                             Update
+                        </Button>
+                        <Button variant="contained"  sx={{marginTop: 2, backgroundColor: '#9e9e9e', marginLeft: '10px'}} onClick={CancelModal}>
+                            Cancel
                         </Button>
                         </div>
                     </Modal>

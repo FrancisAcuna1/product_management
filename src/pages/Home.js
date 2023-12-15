@@ -121,20 +121,28 @@ export default function Home({ categ, productlist, orderHistory }) {
         }
     }
   };
-  const series = uniqueCategories.map(category => ({
+const series = uniqueCategories.flatMap(category => {
+  const categoryProducts = productlist.filter(p => p.category === category);
+
+  const categoryData = categoryProducts.map(product => ({
+    x: product.product, // Product name
+    y: product.stocks, // Stock value
+  }));
+
+  return {
     name: category,
     type: 'area',
-    data: productlist
-      .filter(p => p.category === category)
-      .map(p => p.stocks),
-  label:  `${category}`,
-  }));
+    data: categoryData,
+    label: category,
+  };
+});
+
 
   return (
     <>
       <Navbar />
-      <Box display={"flex"}>
-        <Box component="main" height={230}  sx={{ flexGrow: 1, p: 2, }}>
+      <Box display={"flex"} >
+        <Box component="main" sx={{ flexGrow: 1, p: 2,  minHeight: '100%',}}>
           <Grid container spacing={2}>
             <Grid item xs={3}>
               <Card sx={{ maxWidth: 340, height: 150, marginTop: '20px', justifyContent: "center", alignItems: "center", borderRadius: 0 }}>
